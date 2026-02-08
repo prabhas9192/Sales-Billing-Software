@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Simple Billing Software</title>
+<style>
+  body { margin:0; font-family: Arial, sans-serif; background:#f5f6fa; }
+  .app { display:flex; height:100vh; }
+  .sidebar { width:220px; background:#1e272e; color:#fff; padding:16px; }
+  .sidebar h2 { margin:0 0 16px; }
+  .nav button { width:100%; margin:6px 0; padding:10px; border:0; border-radius:6px; background:#485460; color:#fff; cursor:pointer; }
+  .nav button:hover { background:#808e9b; }
+  .content { flex:1; padding:20px; overflow:auto; }
+  .card { background:#fff; border-radius:10px; padding:16px; margin-bottom:16px; box-shadow:0 2px 8px rgba(0,0,0,.08); }
+  table { width:100%; border-collapse: collapse; }
+  th, td { padding:8px; border-bottom:1px solid #eee; text-align:left; }
+  input, select, button { padding:8px; border-radius:6px; border:1px solid #ccc; }
+  .row { display:flex; gap:10px; flex-wrap:wrap; }
+  .row > * { flex:1; }
+  .actions button { margin-right:6px; }
+  .total { font-size:18px; font-weight:bold; }
+  .hidden { display:none; }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="sidebar">
+    <h2>Billing</h2>
+    <div class="nav">
+      <button onclick="show('dashboard')">Dashboard</button>
+      <button onclick="show('bill')">New Bill</button>
+      <button onclick="show('products')">Products</button>
+      <button onclick="show('customers')">Customers</button>
+      <button onclick="show('reports')">Reports</button>
+    </div>
+  </div>
+
+  <div class="content">
+    <!-- Dashboard -->
+    <div id="dashboard" class="card">
+      <h3>Dashboard</h3>
+      <p id="stats"></p>
+    </div>
+
+    <!-- New Bill -->
+    <div id="bill" class="card hidden">
+      <h3>New Bill</h3>
+      <div class="row">
+        <select id="billCustomer"></select>
+        <select id="billProduct"></select>
+        <input type="number" id="billQty" placeholder="Qty" value="1"/>
+        <button onclick="addToBill()">Add Item</button>
+      </div>
+
+      <table id="billTable">
+        <thead>
+          <tr><th>Product</th><th>Qty</th><th>Price</th><th>Total</th><th></th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+
+      <div class="row">
+        <input type="number" id="tax" placeholder="Tax %" value="0"/>
+        <div class="total" id="grandTotal">Grand Total: 0</div>
+      </div>
+
+      <div class="actions">
+        <button onclick="saveBill()">Save Bill</button>
+        <button onclick="clearBill()">Clear</button>
+      </div>
+    </div>
+
+    <!-- Products -->
+    <div id="products" class="card hidden">
+      <h3>Products</h3>
+      <div class="row">
+        <input id="pName" placeholder="Name"/>
+        <input id="pPrice" type="number" placeholder="Price"/>
+        <button onclick="addProduct()">Add</button>
+      </div>
+      <table id="productsTable"></table>
+    </div>
+
+    <!-- Customers -->
+    <div id="customers" class="card hidden">
+      <h3>Customers</h3>
+      <div class="row">
+        <input id="cName" placeholder="Name"/>
+        <input id="cPhone" placeholder="Phone"/>
+        <button onclick="addCustomer()">Add</button>
+      </div>
+      <table id="customersTable"></table>
+    </div>
+
+    <!-- Reports -->
+    <div id="reports" class="card hidden">
+      <h3>Reports</h3>
+      <table id="reportsTable"></table>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Storage
+  let products = JSON.parse(localStorage.getItem('products')||'[]');
+  let customers = JSON.parse(localStorage.getItem('customers')||'[]');
+  let bills = JSON.parse(localStorage.getItem('bills')||'[]');
+  let currentBill = [];
+
+  function saveAll(){
+    localStorage.setItem('products', JSON.stringify(products));
+    localStorage.setItem('customers', JSON.stringify(customers));
+    localStorage.setItem('bills', JSON.stringify(bills));
+  }
+
+  // Navigation
+  function show(id){
+    document.querySelectorAll('.content > div').forEach(d=>d.classList.add('hidden'));
+    document.getElementById(id).classList.remove('hidden');
+    refreshAll();
+  }
+
+  // Products
+  function addProduct(){
+    const name = pName.value.trim();
+    const price = Number(pPrice.value);
+    if(!name || !price) return alert("Enter name & price");
+    products.push({name, price});
+    pName.value = ""; pPrice.value = "";
+    saveAll(); refreshAll();
+  }
+
+  function delProduct(i){ products.splice(i,1); saveAll(); refreshAll(); }
+
+  // Customers
+  function addCustomer(){
+    const name = cName.value.trim();
+    const phone = cPhone.value.trim();
+    if(!name) return alert("Enter name");
+    customers.push({name, phone});
+    cName.value=""; cPhone.value="";
+    saveAll(); refreshAll();
+  }
+  function delCustomer(i){ customers.splice(i,1); saveAll(); refreshAll(); }
+
+  // Billing
+  function addToBill(){
+    const pIndex = billProduct.value;
+    const qty = Number(billQty.value);
+    if(pIndex==="" || qty<=0) return;
+    const p = products[pIndex];
+    currentBill.push({name:p.name, price:p.price, qty});
+    renderBill();
+  }
+
+  function removeFromBill(i){ currentBill.splice(i,1); renderBill(); }
+
+  function renderBill(){
+    const tbody = document.querySelector("#billTable tbody");
+    tbody.innerHTML = "";
+    let sum = 0;
+    currentBill.forEach((it,i)=>{
+      const t = it.qty * it.price;
+      sum += t;
+      tbody.innerHTML += `<tr>
+        <td>${it.name}</td><td>${it.qty}</td><td>${it.price}</td><td>${t}</td>
+        <td><button onclick="removeFromBill(${i})">X</button></td>
+      </tr>`;
+    });
+    const taxp = Number(tax.value)||0;
+    const grand = sum + (sum*taxp/100);
+    grandTotal.textContent = "Grand Total: " + grand.toFixed(2);
+  }
+
+  function clearBill(){ currentBill=[]; renderBill(); }
+
+  function saveBill(){
+    if(currentBill.length===0) return alert("No items");
+    const customer = billCustomer.value || "Walk-in";
+    const total = grandTotal.textContent.replace("Grand Total: ","");
+    bills.push({date:new Date().toLocaleString(), customer, total});
+    saveAll();
+    clearBill();
+    alert("Bill saved!");
+  }
+
+  // Render tables & selects
+  function refreshAll(){
+    // Products table
+    let pt = "<tr><th>Name</th><th>Price</th><th></th></tr>";
+    products.forEach((p,i)=>{
+      pt += `<tr><td>${p.name}</td><td>${p.price}</td><td><button onclick="delProduct(${i})">Delete</button></td></tr>`;
+    });
+    productsTable.innerHTML = pt;
+
+    // Customers table
+    let ct = "<tr><th>Name</th><th>Phone</th><th></th></tr>";
+    customers.forEach((c,i)=>{
+      ct += `<tr><td>${c.name}</td><td>${c.phone||""}</td><td><button onclick="delCustomer(${i})">Delete</button></td></tr>`;
+    });
+    customersTable.innerHTML = ct;
+
+    // Selects
+    billProduct.innerHTML = '<option value="">Select Product</option>' + products.map((p,i)=>`<option value="${i}">${p.name}</option>`).join("");
+    billCustomer.innerHTML = '<option value="">Walk-in</option>' + customers.map(c=>`<option>${c.name}</option>`).join("");
+
+    // Reports
+    let rt = "<tr><th>Date</th><th>Customer</th><th>Total</th></tr>";
+    bills.forEach(b=>{
+      rt += `<tr><td>${b.date}</td><td>${b.customer}</td><td>${b.total}</td></tr>`;
+    });
+    reportsTable.innerHTML = rt;
+
+    // Dashboard
+    stats.textContent = `Products: ${products.length}, Customers: ${customers.length}, Bills: ${bills.length}`;
+  }
+
+  // Init
+  show('dashboard');
+</script>
+</body>
+</html>
