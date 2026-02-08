@@ -1,0 +1,35 @@
+A. Customer Management
+
+Add/edit/remove customers.
+
+Store details like name, contact, address, GST/Tax info.
+
+B. Product/Inventory Management
+
+Add products with name, code, price, tax %.
+
+Track stock quantities (optional for basic version).
+
+C. Billing/Invoice Generation
+
+Create new bills with selected products & quantities.
+
+Auto-calculate totals, tax, discounts.
+
+Generate printable PDF invoices.
+
+Optionally save invoices for history.
+
+D. Payment Tracking
+
+Record payments (cash, card, online).
+
+Show unpaid balances.
+
+E. Reports
+
+Daily/weekly/monthly sales summary.
+
+Customer-wise or product-wise sales.
+
+Tax reports (GST or local taxes).
