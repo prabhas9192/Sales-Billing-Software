@@ -37,11 +37,11 @@ class BillFlowApp:
         self.root.after(100, lambda: self.navigate("dashboard"))
 
     def _build_sidebar(self):
-        sidebar_outer = tk.Frame(self.root, bg=theme.sidebar_bg, width=200)
+        sidebar_outer = tk.Frame(self.root, bg=theme.sidebar_bg, width=220)
         sidebar_outer.pack(side="left", fill="y")
         sidebar_outer.pack_propagate(False)
 
-        self._sb_canvas = tk.Canvas(sidebar_outer, bg=theme.sidebar_bg, highlightthickness=0, width=200)
+        self._sb_canvas = tk.Canvas(sidebar_outer, bg=theme.sidebar_bg, highlightthickness=0, width=220)
         _sb_scrollbar = ttk.Scrollbar(sidebar_outer, orient="vertical", command=self._sb_canvas.yview)
         self.sidebar = tk.Frame(self._sb_canvas, bg=theme.sidebar_bg)
 
@@ -57,20 +57,20 @@ class BillFlowApp:
         _sb_scrollbar.pack(side="right", fill="y")
 
         def _sb_scroll(event):
-            self._sb_canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
+            if event.num == 4:
+                self._sb_canvas.yview_scroll(-2, "units")
+            elif event.num == 5:
+                self._sb_canvas.yview_scroll(2, "units")
+            elif event.delta:
+                self._sb_canvas.yview_scroll(int(-1 * (event.delta / 60)), "units")
 
-        def _sb_bind(event):
-            self._sb_canvas.bind_all("<MouseWheel>", _sb_scroll)
-            self._sb_canvas.bind_all("<Button-4>", lambda e: self._sb_canvas.yview_scroll(-1, "units"))
-            self._sb_canvas.bind_all("<Button-5>", lambda e: self._sb_canvas.yview_scroll(1, "units"))
-
-        def _sb_unbind(event):
-            self._sb_canvas.unbind_all("<MouseWheel>")
-            self._sb_canvas.unbind_all("<Button-4>")
-            self._sb_canvas.unbind_all("<Button-5>")
-
-        sidebar_outer.bind("<Enter>", _sb_bind)
-        sidebar_outer.bind("<Leave>", _sb_unbind)
+        self._sb_scroll = _sb_scroll
+        self._sb_canvas.bind("<MouseWheel>", _sb_scroll)
+        self._sb_canvas.bind("<Button-4>", _sb_scroll)
+        self._sb_canvas.bind("<Button-5>", _sb_scroll)
+        self.sidebar.bind("<MouseWheel>", _sb_scroll)
+        self.sidebar.bind("<Button-4>", _sb_scroll)
+        self.sidebar.bind("<Button-5>", _sb_scroll)
 
         # Header
         lf = tk.Frame(self.sidebar, bg=theme.sidebar_bg)
@@ -117,10 +117,14 @@ class BillFlowApp:
         tk.Label(self.sidebar, text="v6.0  SQLite", bg=theme.sidebar_bg, fg=theme.muted, font=F_SMALL).pack(pady=(0, 12))
 
     def _add_nav_section(self, label: str):
-        tk.Label(
+        lbl = tk.Label(
             self.sidebar, text=label, bg=theme.sidebar_bg, fg=theme.muted,
             font=("Segoe UI", 7, "bold"), anchor="w", padx=14, pady=4
-        ).pack(fill="x", pady=(8, 2))
+        )
+        lbl.pack(fill="x", pady=(8, 2))
+        lbl.bind("<MouseWheel>", self._sb_scroll)
+        lbl.bind("<Button-4>", self._sb_scroll)
+        lbl.bind("<Button-5>", self._sb_scroll)
 
     def _add_nav_btn(self, label: str, page: str):
         btn = tk.Button(
@@ -131,6 +135,9 @@ class BillFlowApp:
             cursor="hand2", command=lambda: self.navigate(page)
         )
         btn.pack(fill="x", padx=4, pady=1)
+        btn.bind("<MouseWheel>", self._sb_scroll)
+        btn.bind("<Button-4>", self._sb_scroll)
+        btn.bind("<Button-5>", self._sb_scroll)
         self.nav_buttons.append((btn, page))
 
     def _build_workspace(self):
