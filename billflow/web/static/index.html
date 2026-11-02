@@ -2,7 +2,8 @@
 <html lang="en" data-theme="zinc-dark">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#09090b">
   <title>BillFlow - Enterprise POS & Business Management</title>
   <link rel="stylesheet" href="styles.css">
   <script src="chart.min.js"></script>
@@ -10,13 +11,16 @@
 <body>
 
   <div class="app-container">
+    <!-- Dims the page behind the sidebar drawer on phones -->
+    <div class="sidebar-backdrop" onclick="closeSidebar()"></div>
+
     <!-- Left Navigation Sidebar -->
     <aside class="sidebar">
       <div class="sidebar-header">
         <div class="logo-badge">BF</div>
         <div class="logo-text">
           <h1>BillFlow</h1>
-          <span>Sales & Operations</span>
+          <span id="brand-subtitle">Sales & Operations</span>
         </div>
       </div>
 
@@ -64,9 +68,17 @@
               <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
               Stock Orders
             </li>
+            <li class="nav-item" data-view="stock">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+              Stock Control
+            </li>
             <li class="nav-item" data-view="refunds">
               <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 15v-1a4 4 0 00-4-4H4m0 0l3-3m-3 3l3 3m5 4v1a3 3 0 003 3h4a3 3 0 003-3v-1"/></svg>
               Refunds & Returns
+            </li>
+            <li class="nav-item" data-view="audit">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+              Audit Log
             </li>
           </ul>
         </div>
@@ -139,10 +151,14 @@
     <main class="main-wrapper">
       <header class="top-header">
         <div class="header-left">
+          <button class="menu-btn" aria-label="Open menu" onclick="toggleSidebar()">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          </button>
           <h2 id="current-page-title" class="page-title">Executive Dashboard</h2>
         </div>
         <div class="header-right">
-          <button class="quick-btn" onclick="openModal('add-product-modal')">+ Product</button>
+          <button id="staff-chip" class="staff-chip" onclick="openStaffLogin()" title="Who is at the till">Sign in as staff</button>
+          <button class="quick-btn" onclick="openProductModal()">+ Product</button>
           <button class="quick-btn" onclick="openModal('add-customer-modal')">+ Customer</button>
           <button class="quick-btn" onclick="openModal('add-expense-modal')">+ Expense</button>
           <button class="quick-btn primary" onclick="switchView('pos')">New Sale (POS)</button>
@@ -237,7 +253,7 @@
               <div class="cart-summary">
                 <div class="summary-row"><span>Subtotal:</span><span id="cart-subtotal">0.00</span></div>
                 <div class="summary-row"><span>Discount:</span><span id="cart-discount" style="color:var(--accent)">-0.00</span></div>
-                <div class="summary-row"><span>GST Tax (18%):</span><span id="cart-tax">0.00</span></div>
+                <div class="summary-row"><span>GST Tax:</span><span id="cart-tax">0.00</span></div>
                 <div class="summary-row grand-total"><span>Total Amount:</span><span id="cart-grand-total">0.00</span></div>
                 <button id="checkout-action-btn" class="checkout-btn" disabled onclick="openCheckoutModal()">Checkout</button>
               </div>
@@ -249,12 +265,17 @@
         <div id="view-products" class="view-panel">
           <div class="card-panel">
             <div class="card-panel-header">
-              <div><div class="card-panel-title">Product Catalog & Inventory</div><div class="card-panel-desc">Manage SKU pricing, tax codes, and warehouse replenishment</div></div>
-              <button class="quick-btn primary" onclick="openModal('add-product-modal')">+ Add Product</button>
+              <div><div class="card-panel-title">Product Catalog & Inventory</div><div class="card-panel-desc">Prices, costs, barcodes and reorder levels. Change stock with Adjust, so every change keeps a reason.</div></div>
+              <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+                <label class="card-panel-desc" style="display:flex; gap:6px; align-items:center; cursor:pointer;">
+                  <input id="show-archived" type="checkbox" onchange="loadProducts()"> Show archived
+                </label>
+                <button class="quick-btn primary" onclick="openProductModal()">+ Add Product</button>
+              </div>
             </div>
             <div class="table-container">
               <table class="modern-table">
-                <thead><tr><th>ID</th><th>Name</th><th>Category</th><th>Unit Price</th><th>Stock</th><th>HSN Code</th><th>Actions</th></tr></thead>
+                <thead><tr><th>ID</th><th>Name</th><th>Category</th><th>Price</th><th>Cost</th><th>Margin</th><th>Stock</th><th>Reorder At</th><th>Supplier</th><th>Actions</th></tr></thead>
                 <tbody id="products-tbody"></tbody>
               </table>
             </div>
@@ -362,9 +383,119 @@
             </div>
             <div class="table-container">
               <table class="modern-table">
-                <thead><tr><th>PO #</th><th>Date</th><th>Product</th><th>Qty</th><th>Unit Cost</th><th>Supplier</th><th>Status</th><th>Actions</th></tr></thead>
+                <thead><tr><th>PO #</th><th>Date</th><th>Product</th><th>Ordered</th><th>Received</th><th>Unit Cost</th><th>Supplier</th><th>Status</th><th>Actions</th></tr></thead>
                 <tbody id="po-tbody"></tbody>
               </table>
+            </div>
+          </div>
+          <div class="card-panel" style="margin-top:16px;">
+            <div class="card-panel-header">
+              <div><div class="card-panel-title">Suppliers</div><div class="card-panel-desc">Who you buy from. Link products to a supplier and reorders go to them.</div></div>
+              <button class="quick-btn primary" onclick="openSupplierModal()">+ Add Supplier</button>
+            </div>
+            <div class="table-container">
+              <table class="modern-table">
+                <thead><tr><th>Name</th><th>Phone</th><th>GSTIN</th><th>Products</th><th>Actions</th></tr></thead>
+                <tbody id="supplier-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- 8b. STOCK CONTROL -->
+        <div id="view-stock" class="view-panel">
+          <div class="kpi-grid">
+            <div class="kpi-card">
+              <div class="kpi-header"><span class="kpi-title">Stock Value</span><span class="kpi-pill up">At cost</span></div>
+              <div id="kpi-stock-value" class="kpi-value">0.00</div>
+              <div id="kpi-stock-value-sub" class="kpi-subtext">Weighted-average cost of stock on hand</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-header"><span class="kpi-title">Retail Value</span><span class="kpi-pill up">At price</span></div>
+              <div id="kpi-retail-value" class="kpi-value">0.00</div>
+              <div class="kpi-subtext">Stock on hand at selling price</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-header"><span class="kpi-title">Gross Profit</span><span id="kpi-profit-days" class="kpi-pill up">30 days</span></div>
+              <div id="kpi-gross-profit" class="kpi-value">0.00</div>
+              <div id="kpi-gross-profit-sub" class="kpi-subtext">Item sales minus cost of goods sold</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-header"><span class="kpi-title">Stock Ledger</span><span id="kpi-ledger-pill" class="kpi-pill up">Check</span></div>
+              <div id="kpi-ledger" class="kpi-value">-</div>
+              <div id="kpi-ledger-sub" class="kpi-subtext">On hand matches the sum of every movement</div>
+            </div>
+          </div>
+          <div class="card-panel">
+            <div class="card-panel-header">
+              <div><div class="card-panel-title">Stock Control</div><div class="card-panel-desc">Every stock change with its reason, shelf counts, and what your stock is worth</div></div>
+              <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                <button class="cat-chip active" data-stock-tab="movements" onclick="switchStockTab('movements')">Movements</button>
+                <button class="cat-chip" data-stock-tab="count" onclick="switchStockTab('count')">Stocktake</button>
+                <button class="cat-chip" data-stock-tab="value" onclick="switchStockTab('value')">Valuation &amp; Profit</button>
+              </div>
+            </div>
+
+            <div id="stock-tab-movements" class="stock-tab">
+              <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px;">
+                <select id="mv-product" class="modern-input no-icon" style="max-width:280px;" onchange="loadMovements()" aria-label="Product"></select>
+                <select id="mv-type" class="modern-input no-icon" style="max-width:180px;" onchange="loadMovements()" aria-label="Movement type">
+                  <option value="">All types</option><option>Sale</option><option>Refund</option><option>Return</option><option>Purchase</option>
+                  <option>Adjustment</option><option>Stocktake</option><option>Opening</option>
+                </select>
+                <a href="/api/export/movements" download="stock_movements.csv" class="quick-btn">Export CSV</a>
+              </div>
+              <div class="table-container">
+                <table class="modern-table">
+                  <thead><tr><th>Date</th><th>Product</th><th>Type</th><th>Change</th><th>Balance</th><th>Reason</th><th>Note</th></tr></thead>
+                  <tbody id="mv-tbody"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <div id="stock-tab-count" class="stock-tab" hidden>
+              <div class="card-panel-desc" style="margin-bottom:10px;">Type what is on the shelf. Leave an item blank to skip it. Posting sets stock to what you counted and records each difference.</div>
+              <input id="count-search" type="text" class="modern-input no-icon" style="max-width:320px; margin-bottom:12px;" placeholder="Find a product, SKU or barcode" oninput="renderStocktake()">
+              <div class="table-container">
+                <table class="modern-table">
+                  <thead><tr><th>Product</th><th>System Says</th><th>Counted</th><th>Variance</th><th>Value</th></tr></thead>
+                  <tbody id="count-tbody"></tbody>
+                </table>
+              </div>
+              <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; margin-top:12px; flex-wrap:wrap;">
+                <span id="count-summary" class="card-panel-desc">Nothing counted yet.</span>
+                <button class="quick-btn primary" onclick="postStocktake()">Post Count</button>
+              </div>
+            </div>
+
+            <div id="stock-tab-value" class="stock-tab" hidden>
+              <div style="display:flex; gap:8px; align-items:center; margin-bottom:12px; flex-wrap:wrap;">
+                <span class="card-panel-desc">Profit for the last</span>
+                <select id="profit-days" class="modern-input no-icon" style="max-width:140px;" onchange="loadValuation()" aria-label="Profit period">
+                  <option value="7">7 days</option><option value="30" selected>30 days</option><option value="90">90 days</option><option value="365">365 days</option>
+                </select>
+                <span id="profit-note" class="card-panel-desc"></span>
+              </div>
+              <div class="grid-equal-2">
+                <div>
+                  <div class="card-panel-title" style="margin-bottom:8px;">Profit by Item</div>
+                  <div class="table-container">
+                    <table class="modern-table">
+                      <thead><tr><th>Product</th><th>Units</th><th>Sales</th><th>Cost</th><th>Profit</th><th>Margin</th></tr></thead>
+                      <tbody id="profit-tbody"></tbody>
+                    </table>
+                  </div>
+                </div>
+                <div>
+                  <div class="card-panel-title" style="margin-bottom:8px;">Stock Value by Item</div>
+                  <div class="table-container">
+                    <table class="modern-table">
+                      <thead><tr><th>Product</th><th>On Hand</th><th>Avg Cost</th><th>Value</th><th>Margin</th></tr></thead>
+                      <tbody id="value-tbody"></tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -373,7 +504,7 @@
         <div id="view-refunds" class="view-panel">
           <div class="card-panel">
             <div class="card-panel-header">
-              <div><div class="card-panel-title">Refunds & Returns</div><div class="card-panel-desc">Lookup invoice, process return, and automatically restock items</div></div>
+              <div><div class="card-panel-title">Refunds & Returns</div><div class="card-panel-desc">Find an invoice, pick the items coming back and whether each goes back on the shelf. A credit note is issued for every return.</div></div>
             </div>
             <div style="display:flex; gap:10px; margin-bottom:16px;">
               <input id="refund-search-input" type="text" class="modern-input no-icon" placeholder="Enter Invoice # or Customer name...">
@@ -397,8 +528,31 @@
             </div>
             <div class="table-container">
               <table class="modern-table">
-                <thead><tr><th>ID</th><th>Name</th><th>Phone</th><th>Role</th><th>Shift Hours</th><th>Commission %</th><th>Base Salary</th><th>Status</th><th>Actions</th></tr></thead>
+                <thead><tr><th>ID</th><th>Name</th><th>Phone</th><th>Role</th><th>Shift Hours</th><th>Commission %</th><th>Base Salary</th><th>PIN</th><th>Status</th><th>Actions</th></tr></thead>
                 <tbody id="staff-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- 10b. AUDIT LOG -->
+        <div id="view-audit" class="view-panel">
+          <div class="card-panel">
+            <div class="card-panel-header">
+              <div><div class="card-panel-title">Audit Log</div><div class="card-panel-desc">Append-only record of who changed what and when. Entries cannot be edited or deleted.</div></div>
+              <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                <select id="audit-entity" class="modern-input no-icon" style="max-width:160px;" onchange="loadAuditLog()" aria-label="Filter by type">
+                  <option value="">All types</option><option value="bill">Bills</option><option value="product">Products</option>
+                  <option value="staff">Staff</option><option value="stock">Stock</option>
+                </select>
+                <select id="audit-staff" class="modern-input no-icon" style="max-width:180px;" onchange="loadAuditLog()" aria-label="Filter by staff"></select>
+                <button class="quick-btn" onclick="loadAuditLog()">Refresh</button>
+              </div>
+            </div>
+            <div class="table-container">
+              <table class="modern-table">
+                <thead><tr><th>When</th><th>Who</th><th>Action</th><th>Item</th><th>Detail</th></tr></thead>
+                <tbody id="audit-tbody"></tbody>
               </table>
             </div>
           </div>
@@ -410,7 +564,7 @@
             <div class="card-panel-header">
               <div><div class="card-panel-title">Weekly Shift Roster</div><div class="card-panel-desc">Staff shift scheduling for Monday to Sunday</div></div>
               <div style="display:flex; gap:8px;">
-                <input id="roster-week-input" type="text" class="modern-input no-icon" value="2026-W45" style="width:120px;">
+                <input id="roster-week-input" type="text" class="modern-input no-icon" value="" style="width:120px;">
                 <button class="quick-btn primary" onclick="loadRoster()">Load Week</button>
               </div>
             </div>
@@ -562,8 +716,8 @@
               </div>
             </div>
             <div class="card-panel">
-              <div class="card-panel-title">Urgent Reorder Suggestions</div>
-              <div class="card-panel-desc">Items below safety buffer</div>
+              <div class="card-panel-title">Reorder Suggestions</div>
+              <div class="card-panel-desc">Low-stock items with no open order</div>
               <div class="table-container" style="margin-top:8px;">
                 <table class="modern-table">
                   <thead><tr><th>Product Name</th><th>Units Left</th><th>Price</th></tr></thead>
@@ -615,19 +769,34 @@
 
             <!-- Database & Connection Status -->
             <div class="card-panel">
-              <div class="card-panel-title">Database & System Status</div>
-              <div class="card-panel-desc" style="margin-bottom:14px;">Local SQLite database connectivity</div>
+              <div class="card-panel-title">Database</div>
+              <div class="card-panel-desc" style="margin-bottom:14px;">The database this BillFlow is connected to</div>
 
               <div style="padding:14px; background:var(--bg-subtle); border:1px solid var(--border); border-radius:var(--radius-sm); display:flex; align-items:center; gap:12px;">
                 <span class="status-dot"></span>
-                <div>
-                  <div style="font-weight:700; font-size:0.88rem;">SQLite Connected</div>
-                  <div style="font-size:0.75rem; color:var(--text-dim); margin-top:2px;">billflow.db · 206 Bills · 29 Products · 15 Customers</div>
+                <div style="min-width:0;">
+                  <div id="db-status-title" style="font-weight:700; font-size:0.88rem;">Checking...</div>
+                  <div id="db-status-detail" style="font-size:0.75rem; color:var(--text-dim); margin-top:2px; word-break:break-all;"></div>
                 </div>
               </div>
               <div style="margin-top:12px; font-size:0.75rem; color:var(--text-dim);">
-                Engine: SQLite 3 with B-Tree indexes & zero-leak connection pooling.
+                To switch database, stop BillFlow and run <code>python run.py --setup-db</code>. Supported: SQLite, PostgreSQL, MySQL and MariaDB.
               </div>
+            </div>
+
+            <!-- Mobile & Network Access -->
+            <div class="card-panel" style="grid-column: 1 / -1;">
+              <div class="card-panel-title">Mobile Access</div>
+              <div class="card-panel-desc" style="margin-bottom:14px;">Use BillFlow from a phone or tablet on the same Wi-Fi</div>
+              <div id="mobile-access-body"></div>
+            </div>
+
+            <!-- Setup: database, time zone, phone sharing (the computer running BillFlow only) -->
+            <div class="card-panel" id="setup-card" style="grid-column: 1 / -1;" hidden>
+              <div class="card-panel-title">Setup</div>
+              <div class="card-panel-desc" style="margin-bottom:14px;">Database, time zone and phone sharing</div>
+              <div id="setup-summary" style="font-size:0.85rem; margin-bottom:12px;"></div>
+              <a href="/setup" class="quick-btn">Open setup</a>
             </div>
 
             <!-- Store Configuration -->
@@ -645,18 +814,16 @@
                 </div>
                 <div class="form-group">
                   <label class="form-label">Currency</label>
-                  <select id="setting-shop-currency" class="modern-input no-icon">
-                    <option value="INR">INR - Indian Rupee</option>
-                    <option value="USD">USD - US Dollar</option>
-                    <option value="EUR">EUR - Euro</option>
-                    <option value="GBP">GBP - British Pound</option>
-                    <option value="AED">AED - UAE Dirham</option>
-                  </select>
+                  <select id="setting-shop-currency" class="modern-input no-icon"></select>
                 </div>
               </div>
               <div class="form-group">
                 <label class="form-label">Store Address</label>
                 <input id="setting-shop-address" type="text" class="modern-input no-icon">
+              </div>
+              <div class="form-group">
+                <label class="form-label">GSTIN (printed on receipts)</label>
+                <input id="setting-shop-gstin" type="text" class="modern-input no-icon" maxlength="20">
               </div>
               <button class="quick-btn primary" style="margin-top:12px;" onclick="saveStoreSettings()">Save Store Settings</button>
 
@@ -665,6 +832,7 @@
               <div style="display:flex; gap:10px;">
                 <a href="/api/export/bills" download="bills.csv" class="quick-btn">Export Invoices CSV</a>
                 <a href="/api/export/products" download="products.csv" class="quick-btn">Export Products CSV</a>
+                <a href="/api/export/movements" download="stock_movements.csv" class="quick-btn">Export Stock Movements CSV</a>
               </div>
             </div>
           </div>
@@ -672,6 +840,12 @@
 
       </div>
     </main>
+  </div>
+
+  <!-- Phone-only shortcut to the cart while browsing products in the POS -->
+  <div id="mobile-cart-bar" class="mobile-cart-bar" hidden onclick="showCartPanel()">
+    <span id="mobile-cart-summary">0 items</span>
+    <span class="mobile-cart-cta">View cart</span>
   </div>
 
   <!-- CHECKOUT MODAL -->
@@ -711,14 +885,15 @@
   <div id="add-product-modal" class="modal-overlay">
     <div class="modal-card">
       <div class="modal-header">
-        <h3 style="font-size:1rem; font-weight:700;">Add Product</h3>
+        <h3 id="product-modal-title" style="font-size:1rem; font-weight:700;">Add Product</h3>
         <button class="quick-btn" style="padding:2px 8px;" onclick="closeModal('add-product-modal')">Close</button>
       </div>
       <div class="modal-body">
         <div class="form-group"><label class="form-label">Product Name *</label><input id="new-prod-name" type="text" class="modern-input no-icon"></div>
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
           <div class="form-group"><label class="form-label">Unit Price *</label><input id="new-prod-price" type="number" step="0.01" class="modern-input no-icon"></div>
-          <div class="form-group"><label class="form-label">Initial Stock *</label><input id="new-prod-stock" type="number" class="modern-input no-icon"></div>
+          <div class="form-group" id="new-prod-stock-group"><label class="form-label">Initial Stock *</label><input id="new-prod-stock" type="number" min="0" class="modern-input no-icon"></div>
+          <div class="form-group" id="new-prod-gst-group"><label class="form-label">GST Rate %</label><input id="new-prod-gst" type="number" step="0.01" min="0" value="18" class="modern-input no-icon"></div>
         </div>
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
           <div class="form-group">
@@ -733,6 +908,16 @@
           </div>
           <div class="form-group"><label class="form-label">HSN Code</label><input id="new-prod-hsn" type="text" class="modern-input no-icon"></div>
         </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+          <div class="form-group"><label class="form-label">Cost Price</label><input id="new-prod-cost" type="number" step="0.01" min="0" class="modern-input no-icon" placeholder="What you pay per unit"></div>
+          <div class="form-group"><label class="form-label">Reorder Level</label><input id="new-prod-reorder" type="number" min="0" value="10" class="modern-input no-icon" title="Low stock when fewer units than this are left. 0 turns the alert off."></div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+          <div class="form-group"><label class="form-label">SKU</label><input id="new-prod-sku" type="text" maxlength="64" class="modern-input no-icon"></div>
+          <div class="form-group"><label class="form-label">Barcode</label><input id="new-prod-barcode" type="text" maxlength="64" class="modern-input no-icon" placeholder="Scan or type"></div>
+        </div>
+        <div class="form-group"><label class="form-label">Supplier</label><select id="new-prod-supplier" class="modern-input no-icon"></select></div>
+        <div id="product-modal-error" class="form-label" style="color:var(--danger); min-height:1.2em;" role="alert"></div>
         <button class="checkout-btn" onclick="submitNewProduct()">Save Product</button>
       </div>
     </div>
@@ -848,9 +1033,57 @@
           <div class="form-group"><label class="form-label">Quantity to Order *</label><input id="new-po-qty" type="number" class="modern-input no-icon" value="20"></div>
           <div class="form-group"><label class="form-label">Unit Cost *</label><input id="new-po-cost" type="number" step="0.01" class="modern-input no-icon"></div>
         </div>
-        <div class="form-group"><label class="form-label">Supplier Name</label><input id="new-po-supp" type="text" class="modern-input no-icon"></div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+          <div class="form-group"><label class="form-label">Supplier</label><select id="new-po-supplier-id" class="modern-input no-icon"></select></div>
+          <div class="form-group"><label class="form-label">Or Supplier Name</label><input id="new-po-supp" type="text" class="modern-input no-icon"></div>
+        </div>
         <div class="form-group"><label class="form-label">Note</label><input id="new-po-note" type="text" class="modern-input no-icon"></div>
+        <div id="po-modal-error" class="form-label" style="color:var(--danger); min-height:1.2em;" role="alert"></div>
         <button class="checkout-btn" onclick="submitNewPO()">Create Order</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADJUST STOCK MODAL -->
+  <div id="adjust-stock-modal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 style="font-size:1rem; font-weight:700;">Adjust Stock</h3>
+        <button class="quick-btn" style="padding:2px 8px;" onclick="closeModal('adjust-stock-modal')">Close</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group"><label class="form-label">Product *</label><select id="adj-product" class="modern-input no-icon"></select></div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+          <div class="form-group"><label class="form-label">Direction</label>
+            <select id="adj-direction" class="modern-input no-icon"><option value="-1">Remove stock</option><option value="1">Add stock</option></select></div>
+          <div class="form-group"><label class="form-label">Quantity *</label><input id="adj-qty" type="number" min="1" step="1" value="1" class="modern-input no-icon"></div>
+        </div>
+        <div class="form-group"><label class="form-label">Reason *</label><select id="adj-reason" class="modern-input no-icon"></select></div>
+        <div class="form-group"><label class="form-label">Note</label><input id="adj-note" type="text" maxlength="200" class="modern-input no-icon" placeholder="Optional, e.g. which shelf or who found it"></div>
+        <div id="adj-hint" class="card-panel-desc" style="margin-bottom:6px;"></div>
+        <div id="adj-error" class="form-label" style="color:var(--danger); min-height:1.2em;" role="alert"></div>
+        <button class="checkout-btn" onclick="submitAdjustment()">Save Adjustment</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUPPLIER MODAL -->
+  <div id="supplier-modal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="supplier-modal-title" style="font-size:1rem; font-weight:700;">Add Supplier</h3>
+        <button class="quick-btn" style="padding:2px 8px;" onclick="closeModal('supplier-modal')">Close</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group"><label class="form-label">Supplier Name *</label><input id="sup-name" type="text" maxlength="255" class="modern-input no-icon"></div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+          <div class="form-group"><label class="form-label">Phone</label><input id="sup-phone" type="text" maxlength="30" class="modern-input no-icon"></div>
+          <div class="form-group"><label class="form-label">GSTIN</label><input id="sup-gstin" type="text" maxlength="20" class="modern-input no-icon"></div>
+        </div>
+        <div class="form-group"><label class="form-label">Email</label><input id="sup-email" type="email" maxlength="255" class="modern-input no-icon"></div>
+        <div class="form-group"><label class="form-label">Address</label><input id="sup-address" type="text" maxlength="500" class="modern-input no-icon"></div>
+        <div id="supplier-modal-error" class="form-label" style="color:var(--danger); min-height:1.2em;" role="alert"></div>
+        <button class="checkout-btn" onclick="submitSupplier()">Save Supplier</button>
       </div>
     </div>
   </div>
@@ -882,7 +1115,67 @@
           <div class="form-group"><label class="form-label">Monthly Salary</label><input id="new-staff-sal" type="number" class="modern-input no-icon" value="20000"></div>
           <div class="form-group"><label class="form-label">Commission %</label><input id="new-staff-comm" type="number" step="0.1" class="modern-input no-icon" value="1.0"></div>
         </div>
+        <div class="form-group"><label class="form-label">Staff PIN (4+ digits, optional)</label><input id="new-staff-pin" type="password" inputmode="numeric" autocomplete="off" maxlength="12" class="modern-input no-icon" placeholder="Used to sign in at the till"></div>
+        <div id="staff-modal-error" class="form-label" style="color:var(--danger); min-height:1.2em;" role="alert"></div>
         <button class="checkout-btn" onclick="submitNewStaff()">Save Staff</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STAFF SIGN-IN MODAL -->
+  <div id="staff-login-modal" class="modal-overlay">
+    <div class="modal-card" style="max-width: 360px;">
+      <div class="modal-header">
+        <h3 style="font-size:1rem; font-weight:700;">Staff Sign-in</h3>
+        <button class="quick-btn" style="padding:2px 8px;" onclick="closeModal('staff-login-modal')">Close</button>
+      </div>
+      <div class="modal-body">
+        <div class="card-panel-desc">Enter your own PIN so sales, returns and stock changes are recorded under your name.</div>
+        <div class="form-group"><label class="form-label">Your PIN</label><input id="staff-login-pin" type="password" inputmode="numeric" autocomplete="off" maxlength="12" class="modern-input no-icon" onkeydown="if(event.key==='Enter') submitStaffLogin()"></div>
+        <div id="staff-login-error" class="form-label" style="color:var(--danger); min-height:1.2em;" role="alert"></div>
+        <button class="checkout-btn" onclick="submitStaffLogin()">Sign in</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SET STAFF PIN MODAL -->
+  <div id="staff-pin-modal" class="modal-overlay">
+    <div class="modal-card" style="max-width: 360px;">
+      <div class="modal-header">
+        <h3 id="staff-pin-title" style="font-size:1rem; font-weight:700;">Set PIN</h3>
+        <button class="quick-btn" style="padding:2px 8px;" onclick="closeModal('staff-pin-modal')">Close</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group"><label class="form-label">New PIN (4+ digits)</label><input id="staff-pin-input" type="password" inputmode="numeric" autocomplete="off" maxlength="12" class="modern-input no-icon" onkeydown="if(event.key==='Enter') submitStaffPin()"></div>
+        <div class="card-panel-desc">Leave empty and save to remove this person's PIN.</div>
+        <div id="staff-pin-error" class="form-label" style="color:var(--danger); min-height:1.2em;" role="alert"></div>
+        <button class="checkout-btn" onclick="submitStaffPin()">Save PIN</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- RETURN ITEMS MODAL -->
+  <div id="return-modal" class="modal-overlay">
+    <div class="modal-card" style="max-width: 640px;">
+      <div class="modal-header">
+        <h3 id="return-modal-title" style="font-size:1rem; font-weight:700;">Return Items</h3>
+        <button class="quick-btn" style="padding:2px 8px;" onclick="closeModal('return-modal')">Close</button>
+      </div>
+      <div class="modal-body">
+        <div id="return-lines-wrap" class="table-container">
+          <table class="modern-table">
+            <thead><tr><th>Item</th><th>Sold</th><th>Can return</th><th>Return qty</th><th>Goes to</th></tr></thead>
+            <tbody id="return-tbody"></tbody>
+          </table>
+        </div>
+        <div class="form-group"><label class="form-label">Reason</label><input id="return-reason" type="text" maxlength="200" class="modern-input no-icon" value="Customer return"></div>
+        <div id="return-hint" class="card-panel-desc"></div>
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;">
+          <button class="quick-btn" onclick="returnSelectAll()">Select everything</button>
+          <span id="return-total" style="font-weight:700;"></span>
+        </div>
+        <div id="return-error" class="form-label" style="color:var(--danger); min-height:1.2em;" role="alert"></div>
+        <button id="return-submit" class="checkout-btn" onclick="submitReturn()">Issue Credit Note</button>
       </div>
     </div>
   </div>

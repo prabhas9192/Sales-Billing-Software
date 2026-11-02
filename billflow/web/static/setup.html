@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#09090b">
+  <title>BillFlow - Setup</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #09090b; --card: #18181b; --field: #121215; --border: #27272a; --border-hi: #52525b;
+      --text: #fafafa; --muted: #a1a1aa; --dim: #71717a;
+      --accent: #10b981; --accent-bg: rgba(16, 185, 129, 0.12); --danger: #ef4444; --warn: #f59e0b;
+    }
+    body {
+      min-height: 100vh; padding: 28px 16px 60px;
+      background: var(--bg); color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased; line-height: 1.5;
+    }
+    main { max-width: 760px; margin: 0 auto; }
+    header { display: flex; align-items: center; gap: 14px; margin-bottom: 8px; }
+    .badge {
+      width: 40px; height: 40px; border-radius: 9px; background: var(--text); color: var(--bg);
+      font-weight: 700; display: flex; align-items: center; justify-content: center;
+    }
+    h1 { font-size: 1.35rem; letter-spacing: -0.02em; }
+    .lead { color: var(--muted); font-size: 0.9rem; margin-bottom: 22px; }
+    section {
+      background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+      padding: 22px; margin-bottom: 18px;
+    }
+    h2 { font-size: 1.02rem; margin-bottom: 4px; }
+    .hint { color: var(--dim); font-size: 0.78rem; margin: 2px 0 12px; }
+    label.field { display: block; margin-bottom: 12px; }
+    label.field > span { display: block; font-size: 0.76rem; font-weight: 600; color: var(--muted); margin-bottom: 5px; }
+    input[type=text], input[type=password], input[type=number], select {
+      width: 100%; padding: 10px 12px; background: var(--field); color: var(--text);
+      border: 1px solid var(--border); border-radius: 8px; font-size: 0.92rem; outline: none;
+    }
+    input:focus, select:focus { border-color: var(--border-hi); }
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 14px; }
+    .engines { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-bottom: 16px; }
+    .engine {
+      display: block; padding: 12px 14px; border: 1px solid var(--border); border-radius: 10px;
+      background: var(--field); cursor: pointer;
+    }
+    .engine:has(input:checked) { border-color: var(--accent); background: var(--accent-bg); }
+    .engine.off { opacity: 0.6; cursor: not-allowed; }
+    .engine strong { display: block; font-size: 0.92rem; }
+    .engine small { display: block; color: var(--muted); font-size: 0.76rem; margin-top: 2px; }
+    .engine .need { color: var(--warn); font-size: 0.74rem; margin-top: 6px; }
+    .engine input { position: absolute; opacity: 0; pointer-events: none; }
+    .check { display: flex; gap: 10px; align-items: flex-start; margin: 4px 0 10px; font-size: 0.88rem; cursor: pointer; }
+    .check input { margin-top: 4px; width: 16px; height: 16px; accent-color: var(--accent); }
+    .check small { display: block; color: var(--dim); font-size: 0.76rem; }
+    button {
+      padding: 10px 16px; border-radius: 8px; border: 1px solid var(--border); background: var(--field);
+      color: var(--text); font-size: 0.86rem; font-weight: 600; cursor: pointer;
+    }
+    button:hover { border-color: var(--border-hi); }
+    button.primary { background: var(--accent); border-color: var(--accent); color: #fff; font-size: 0.98rem; padding: 13px 22px; }
+    button:disabled { opacity: 0.55; cursor: not-allowed; }
+    .row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+    .result { font-size: 0.82rem; word-break: break-word; }
+    .ok { color: var(--accent); } .bad { color: var(--danger); }
+    .notice { background: var(--accent-bg); border: 1px solid var(--accent); border-radius: 10px; padding: 12px 14px; font-size: 0.84rem; margin-bottom: 18px; }
+    #error { color: var(--danger); font-size: 0.88rem; margin-top: 14px; min-height: 1.3em; }
+    .clock { color: var(--muted); font-size: 0.8rem; margin: -4px 0 12px; }
+    .pin { font: 700 1.6rem ui-monospace, Menlo, Consolas, monospace; letter-spacing: 0.3em; background: var(--field); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; display: inline-block; margin: 6px 0; }
+    ul.done { list-style: none; margin: 12px 0 18px; }
+    ul.done li { padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
+    ul.done li span { color: var(--muted); display: inline-block; min-width: 110px; }
+    a.button { display: inline-block; text-decoration: none; background: var(--accent); color: #fff; padding: 13px 22px; border-radius: 8px; font-weight: 700; }
+    @media (max-width: 560px) {
+      section { padding: 16px; }
+      .engines, .grid2 { grid-template-columns: 1fr; }
+      input[type=text], input[type=password], input[type=number], select { font-size: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <div class="badge">BF</div>
+      <h1>Set up BillFlow</h1>
+    </header>
+    <p class="lead">A few choices to get your shop ready. You can come back to this page later from Settings.</p>
+
+    <div id="rerun" class="notice" hidden></div>
+    <div id="fatal" class="notice" hidden style="border-color: var(--danger);"></div>
+
+    <form id="setup-form" hidden>
+      <section>
+        <h2>1. Database</h2>
+        <p class="hint">Where BillFlow keeps your bills, products and customers. SQLite is the simplest: it needs nothing installed.</p>
+        <div class="engines" id="engines" role="radiogroup" aria-label="Database type"></div>
+        <div id="db-fields"></div>
+        <div class="row">
+          <button type="button" id="test-db">Test connection</button>
+          <span class="result" id="test-result" role="status"></span>
+        </div>
+      </section>
+
+      <section>
+        <h2>2. Your shop</h2>
+        <p class="hint">Shown on receipts and in the sidebar.</p>
+        <label class="field"><span>Shop name</span><input type="text" id="shop-name" maxlength="120" autocomplete="organization" required></label>
+        <div class="grid2">
+          <label class="field"><span>Phone</span><input type="text" id="shop-phone" maxlength="40" autocomplete="tel"></label>
+          <label class="field"><span>GSTIN (optional)</span><input type="text" id="shop-gstin" maxlength="20"></label>
+        </div>
+        <label class="field"><span>Address</span><input type="text" id="shop-address" maxlength="250" autocomplete="street-address"></label>
+        <div class="grid2">
+          <label class="field"><span>Currency</span><select id="currency"></select></label>
+          <label class="field"><span>Time zone</span>
+            <input type="text" id="timezone" list="tz-list" placeholder="Start typing, e.g. Asia/Kolkata" autocomplete="off" spellcheck="false">
+            <datalist id="tz-list"></datalist>
+          </label>
+        </div>
+        <div class="clock" id="clock"></div>
+        <div class="row"><button type="button" id="use-device-tz">Use this device's time zone</button>
+          <span class="hint" style="margin:0;">Bills are stamped, and each day starts and ends, in this time zone.</span></div>
+      </section>
+
+      <section>
+        <h2>3. Options</h2>
+        <label class="check"><input type="checkbox" id="sample-data">
+          <span>Fill it with sample data so I can try BillFlow<small>Only added to an empty database. Skip this if you are starting with real data.</small></span></label>
+        <label class="check"><input type="checkbox" id="share">
+          <span>Let phones on the same Wi-Fi use BillFlow<small>Each phone signs in once with a PIN. Takes effect the next time BillFlow starts.</small></span></label>
+        <label class="field" id="pin-field" hidden style="margin-left: 26px;"><span>PIN for phones (4 to 12 digits, or leave empty for a random one)</span>
+          <input type="text" id="pin" inputmode="numeric" maxlength="12" autocomplete="off" style="max-width: 240px;"></label>
+      </section>
+
+      <button type="submit" class="primary" id="finish">Save and start</button>
+      <div id="error" role="alert"></div>
+    </form>
+
+    <section id="done" hidden>
+      <h2>All set</h2>
+      <ul class="done" id="done-list"></ul>
+      <div id="done-pin" hidden>
+        <p class="hint">Phones sign in with this PIN:</p>
+        <div class="pin" id="pin-shown"></div>
+      </div>
+      <p class="hint" id="restart-note" hidden>Phone access starts the next time BillFlow is started.</p>
+      <p style="margin-top: 14px;"><a class="button" href="/">Open BillFlow</a></p>
+    </section>
+  </main>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+    let info = null;
+
+    function el(tag, props = {}, ...children) {
+      const node = document.createElement(tag);
+      for (const [key, value] of Object.entries(props)) {
+        if (key === 'class') node.className = value;
+        else if (key === 'text') node.textContent = value;
+        else node.setAttribute(key, value);
+      }
+      node.append(...children);
+      return node;
+    }
+
+    async function api(path, body) {
+      const res = await fetch(path, body === undefined ? undefined : {
+        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body)
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || `Something went wrong (${res.status}).`);
+      return data;
+    }
+
+    function chosenEngine() {
+      const picked = document.querySelector('input[name=engine]:checked');
+      return info.engines.find((e) => e.key === (picked && picked.value));
+    }
+
+    function renderEngines(selectedKey) {
+      const box = $('engines');
+      box.replaceChildren();
+      for (const engine of info.engines) {
+        const radio = el('input', { type: 'radio', name: 'engine', value: engine.key });
+        if (!engine.ready) radio.disabled = true;
+        if (engine.key === selectedKey) radio.checked = true;
+        radio.addEventListener('change', () => renderDbFields());
+        const card = el('label', { class: 'engine' + (engine.ready ? '' : ' off') }, radio,
+          el('strong', { text: engine.label }), el('small', { text: engine.about }));
+        if (!engine.ready) {
+          card.append(el('div', { class: 'need', text: `Needs a driver first: pip install ${engine.pip}  (then reload this page)` }));
+        }
+        box.append(card);
+      }
+    }
+
+    function field(id, label, props = {}) {
+      return el('label', { class: 'field' }, el('span', { text: label }), el('input', { id, type: 'text', ...props }));
+    }
+
+    function renderDbFields() {
+      const engine = chosenEngine();
+      const box = $('db-fields');
+      const current = info.database && info.database.engine === engine.key ? info.database : {};
+      box.replaceChildren();
+      $('test-result').textContent = '';
+      if (!engine.server) {
+        box.append(field('f-path', 'Database file', { value: current.path || 'data/billflow.db', spellcheck: 'false' }),
+          el('p', { class: 'hint', text: 'A file name on its own is saved inside the BillFlow folder. It is created if it does not exist.' }));
+        return;
+      }
+      box.append(
+        el('div', { class: 'grid2' },
+          field('f-host', 'Server', { value: current.host || 'localhost', spellcheck: 'false' }),
+          field('f-port', 'Port', { value: current.port || engine.port, inputmode: 'numeric' })),
+        field('f-name', 'Database name', { value: current.name || 'billflow', spellcheck: 'false' }),
+        el('div', { class: 'grid2' },
+          field('f-user', 'User', { value: current.user || engine.default_user, spellcheck: 'false', autocomplete: 'off' }),
+          el('label', { class: 'field' }, el('span', { text: 'Password' }),
+            el('input', { id: 'f-password', type: 'password', autocomplete: 'off' }))),
+        el('label', { class: 'check' }, el('input', { type: 'checkbox', id: 'f-create' }),
+          el('span', { text: 'Create the database if it does not exist yet' })));
+    }
+
+    function collectDatabase() {
+      const engine = chosenEngine();
+      const value = (id) => ($(id) ? $(id).value : '');
+      return { engine: engine.key, path: value('f-path'), host: value('f-host'), port: value('f-port'),
+               name: value('f-name'), user: value('f-user'), password: value('f-password') };
+    }
+
+    function showTest(message, ok) {
+      const out = $('test-result');
+      out.textContent = message;
+      out.className = 'result ' + (ok ? 'ok' : 'bad');
+    }
+
+    async function testDatabase() {
+      if (!chosenEngine()) return showTest('Choose a database type first.', false);
+      $('test-db').disabled = true;
+      showTest('Testing...', true);
+      try {
+        const result = await api('/api/setup/test-db', { database: collectDatabase() });
+        if (result.missing && $('f-create')) {
+          $('f-create').checked = true;
+          showTest(`${result.message}  It will be created when you save.`, true);
+        } else {
+          showTest(result.message, result.ok);
+        }
+      } catch (err) {
+        showTest(err.message, false);
+      }
+      $('test-db').disabled = false;
+    }
+
+    function updateClock() {
+      const name = $('timezone').value.trim();
+      try {
+        const when = new Intl.DateTimeFormat('en-GB', { timeZone: name || undefined, dateStyle: 'full', timeStyle: 'short' }).format(new Date());
+        $('clock').textContent = name ? `Shop time now: ${when}` : `Using this computer's own time zone. Now: ${when}`;
+      } catch (err) {
+        $('clock').textContent = 'That is not a time zone BillFlow knows. Pick one from the list.';
+      }
+    }
+
+    function deviceTimezone() {
+      const name = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      return info.timezones.includes(name) ? name : '';
+    }
+
+    function fillForm() {
+      const settings = info.settings;
+      $('shop-name').value = info.complete ? settings.shop_name : '';
+      $('shop-phone').value = settings.shop_phone;
+      $('shop-gstin').value = settings.shop_gstin;
+      $('shop-address').value = settings.shop_address;
+
+      const currency = $('currency');
+      for (const c of info.currencies) {
+        currency.append(el('option', { value: c.code, text: `${c.code} - ${c.name} (${c.symbol})` }));
+      }
+      currency.value = settings.currency;
+
+      const zones = $('tz-list');
+      for (const name of info.timezones) zones.append(el('option', { value: name }));
+      $('timezone').value = settings.timezone || deviceTimezone() || info.system_timezone || '';
+      updateClock();
+
+      $('share').checked = info.share.enabled;
+      $('pin-field').hidden = !$('share').checked;
+    }
+
+    async function save(event) {
+      event.preventDefault();
+      $('error').textContent = '';
+      if (!chosenEngine()) { $('error').textContent = 'Choose a database type.'; return; }
+      const finish = $('finish');
+      finish.disabled = true;
+      finish.textContent = 'Saving...';
+      try {
+        const result = await api('/api/setup/apply', {
+          database: collectDatabase(),
+          create_database: !!($('f-create') && $('f-create').checked),
+          settings: {
+            shop_name: $('shop-name').value, shop_phone: $('shop-phone').value, shop_gstin: $('shop-gstin').value,
+            shop_address: $('shop-address').value, currency: $('currency').value, timezone: $('timezone').value.trim()
+          },
+          sample_data: $('sample-data').checked,
+          share: { enabled: $('share').checked, pin: $('pin').value.trim() }
+        });
+        showDone(result);
+      } catch (err) {
+        $('error').textContent = err.message;
+        finish.disabled = false;
+        finish.textContent = 'Save and start';
+      }
+    }
+
+    function showDone(result) {
+      const list = $('done-list');
+      const rows = [['Database', result.database], ['Shop', $('shop-name').value.trim()],
+                    ['Currency', $('currency').value], ['Time zone', $('timezone').value.trim() || "this computer's"]];
+      for (const message of result.messages) rows.push(['Note', message]);
+      for (const [name, value] of rows) list.append(el('li', {}, el('span', { text: name }), document.createTextNode(value)));
+      if (result.share && result.pin) {
+        $('pin-shown').textContent = result.pin;
+        $('done-pin').hidden = false;
+      }
+      $('restart-note').hidden = !result.restart_needed;
+      $('setup-form').hidden = true;
+      $('done').hidden = false;
+      window.scrollTo(0, 0);
+    }
+
+    async function init() {
+      try {
+        info = await api('/api/setup/state');
+      } catch (err) {
+        const box = $('fatal');
+        box.textContent = err.message.includes('only be changed on the computer')
+          ? 'Setup can only be changed on the computer that runs BillFlow. Open this page there.'
+          : err.message;
+        box.hidden = false;
+        return;
+      }
+      if (info.complete && info.database) {
+        const note = $('rerun');
+        note.textContent = `BillFlow is already set up (${info.database.display}). You can change things here. Switching to a different database does not move your existing data.`;
+        note.hidden = false;
+      }
+      renderEngines(info.database ? info.database.engine : 'sqlite');
+      if (!chosenEngine()) renderEngines('sqlite');
+      renderDbFields();
+      fillForm();
+      $('setup-form').hidden = false;
+
+      $('test-db').addEventListener('click', testDatabase);
+      $('timezone').addEventListener('input', updateClock);
+      $('use-device-tz').addEventListener('click', () => { $('timezone').value = deviceTimezone(); updateClock(); });
+      $('share').addEventListener('change', () => { $('pin-field').hidden = !$('share').checked; });
+      $('setup-form').addEventListener('submit', save);
+      setInterval(updateClock, 20000);
+    }
+
+    init();
+  </script>
+</body>
+</html>

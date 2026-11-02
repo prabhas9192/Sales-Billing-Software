@@ -1,43 +1,41 @@
 [build-system]
-requires = ["setuptools>=61.0", "wheel"]
+requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "billflow"
 version = "6.0.0"
-description = "Modern Point of Sale (POS), Inventory & Financial Management Suite"
+description = "Sales, billing and inventory for a shop: runs on a laptop, used from phones, on SQLite, PostgreSQL, MySQL or MariaDB"
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "MIT" }
 authors = [
     { name = "Prabhas" }
 ]
-keywords = ["pos", "billing", "retail", "inventory", "sales", "analytics", "gst", "shadcn"]
+keywords = ["pos", "billing", "retail", "inventory", "sales", "gst", "sqlite", "postgresql", "mysql", "mariadb"]
 classifiers = [
     "Development Status :: 5 - Production/Stable",
-    "Environment :: X11 Applications",
     "Environment :: Web Environment",
     "Intended Audience :: End Users/Desktop",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
-    "Programming Language :: Python :: 3.13",
-    "Programming Language :: Python :: 3.14",
     "Topic :: Office/Business :: Financial :: Point-Of-Sale",
 ]
 dependencies = [
-    "matplotlib>=3.7.0",
-    "pillow>=9.5.0",
+    "tzdata; sys_platform == 'win32'",  # Windows has no time zone database of its own
 ]
 
 [project.optional-dependencies]
-desktop = [
-    "PySide6>=6.5.0",
-]
+postgresql = ["psycopg[binary]>=3.1"]
+mysql = ["PyMySQL>=1.1"]
+desktop = ["PySide6>=6.5.0"]
 
 [project.scripts]
-billflow = "run_modern:main"
-billflow-classic = "run:main"
+billflow = "billflow.launcher:main"
+
+[tool.setuptools.packages.find]
+include = ["billflow*"]
+
+[tool.setuptools.package-data]
+"billflow.web" = ["static/*"]

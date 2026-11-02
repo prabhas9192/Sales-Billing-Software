@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#09090b">
+  <title>BillFlow - Sign in</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100vh; min-height: 100dvh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+      background: #09090b; color: #fafafa;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+    .card {
+      width: 100%; max-width: 360px;
+      background: #18181b; border: 1px solid #27272a; border-radius: 12px;
+      padding: 28px 24px; box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.4);
+    }
+    .brand { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; }
+    .badge {
+      width: 36px; height: 36px; border-radius: 8px;
+      background: #fafafa; color: #09090b; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+    }
+    h1 { font-size: 1.05rem; letter-spacing: -0.01em; }
+    .sub { font-size: 0.78rem; color: #a1a1aa; }
+    label { display: block; font-size: 0.78rem; font-weight: 600; color: #a1a1aa; margin-bottom: 6px; }
+    input {
+      width: 100%; padding: 12px 14px;
+      background: #121215; color: #fafafa;
+      border: 1px solid #27272a; border-radius: 8px;
+      font-size: 1.4rem; letter-spacing: 0.35em; text-align: center; outline: none;
+    }
+    input:focus { border-color: #fafafa; }
+    button {
+      width: 100%; margin-top: 14px; padding: 13px;
+      background: #10b981; color: #fff; border: none; border-radius: 8px;
+      font-size: 0.95rem; font-weight: 700; cursor: pointer;
+    }
+    button:disabled { opacity: 0.55; cursor: not-allowed; }
+    .error { min-height: 1.3em; margin-top: 12px; font-size: 0.8rem; color: #ef4444; text-align: center; }
+    .hint { margin-top: 14px; font-size: 0.72rem; color: #71717a; text-align: center; }
+  </style>
+</head>
+<body>
+  <form class="card" id="login-form">
+    <div class="brand">
+      <div class="badge">BF</div>
+      <div><h1>BillFlow</h1><div class="sub">Sign in to continue</div></div>
+    </div>
+    <label for="pin">Access PIN</label>
+    <input id="pin" name="pin" type="password" inputmode="numeric" pattern="[0-9]*"
+           autocomplete="current-password" maxlength="12" autofocus required>
+    <button id="submit" type="submit">Sign in</button>
+    <div class="error" id="error" role="alert"></div>
+    <div class="hint">The PIN is shown on the computer running BillFlow (Settings, then Mobile Access).</div>
+  </form>
+
+  <script>
+    const form = document.getElementById('login-form');
+    const pin = document.getElementById('pin');
+    const button = document.getElementById('submit');
+    const error = document.getElementById('error');
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      button.disabled = true;
+      error.textContent = '';
+      try {
+        const res = await fetch('/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ pin: pin.value })
+        });
+        if (res.ok) {
+          location.replace('/');
+          return;
+        }
+        const body = await res.json().catch(() => ({}));
+        error.textContent = body.error || 'Could not sign in.';
+        pin.value = '';
+        pin.focus();
+      } catch (err) {
+        error.textContent = 'Cannot reach BillFlow. Check that you are on the same network.';
+      }
+      button.disabled = false;
+    });
+  </script>
+</body>
+</html>

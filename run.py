@@ -1,19 +1,8 @@
 #!/usr/bin/env python3
-"""
-BillFlow — Modern Sales & Billing Software
-Entry point
-"""
+"""Start BillFlow:  python run.py   (add --help for the options)"""
 import sys
 
-def main():
-    try:
-        from billflow.app import BillFlowApp
-    except ImportError as exc:
-        print(f"Error starting BillFlow: {exc}", file=sys.stderr)
-        sys.exit(1)
-
-    app = BillFlowApp()
-    app.run()
+from billflow.launcher import main
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

@@ -1,3 +1,0 @@
-"""
-BillFlow UI Module
-"""

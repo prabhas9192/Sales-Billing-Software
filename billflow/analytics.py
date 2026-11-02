@@ -1,7 +1,8 @@
 import datetime
-import calendar
 from collections import defaultdict
 from .database import db_all, db_one, db_run
+from .schema import DEFAULT_REORDER_LEVEL
+from . import clock
 from .config import curr_sym
 from .utils import rnd
 
@@ -44,7 +45,7 @@ def get_best_day_of_week() -> str:
     return f"{WEEKDAYS[best_wd]}s perform {ratio:.1f}x vs average"
 
 def predict_tomorrow() -> str:
-    tomorrow = datetime.date.today() + datetime.timedelta(days=1)
+    tomorrow = clock.today() + datetime.timedelta(days=1)
     wd = tomorrow.weekday()
     avgs = get_weekly_day_avg()
     if not avgs or wd not in avgs:
@@ -60,32 +61,15 @@ def predict_tomorrow() -> str:
         return f"~ {day_name} should be average — ~{curr_sym()}{day_avg:,.0f} expected"
 
 def get_dead_stock(days: int = 10) -> list:
-    cutoff = (datetime.date.today() - datetime.timedelta(days=days)).strftime("%Y-%m-%d")
+    cutoff = (clock.today() - datetime.timedelta(days=days)).strftime("%Y-%m-%d")
     sold_ids = set(
         r["product_id"] for r in db_all(
             "SELECT DISTINCT bi.product_id FROM bill_items bi "
             "JOIN bills b ON bi.bill_id=b.id WHERE b.date >= ?", (cutoff,)
         ) if r["product_id"]
     )
-    all_prods = db_all("SELECT id, name, quantity FROM products WHERE quantity > 0")
+    all_prods = db_all("SELECT id, name, quantity FROM products WHERE quantity > 0 ORDER BY id")
     return [p for p in all_prods if p["id"] not in sold_ids]
-
-def get_weekly_revenue_change() -> float:
-    today = datetime.date.today()
-    this_mon = today - datetime.timedelta(days=today.weekday())
-    last_mon = this_mon - datetime.timedelta(days=7)
-    this_week = sum(
-        float(r["total"]) for r in db_all("SELECT total FROM bills WHERE date >= ?", (this_mon.strftime("%Y-%m-%d"),))
-    )
-    last_week = sum(
-        float(r["total"]) for r in db_all(
-            "SELECT total FROM bills WHERE date >= ? AND date < ?",
-            (last_mon.strftime("%Y-%m-%d"), this_mon.strftime("%Y-%m-%d"))
-        )
-    )
-    if last_week == 0:
-        return 0.0
-    return ((this_week - last_week) / last_week) * 100
 
 def auto_tag_customer(cust_id: int):
     c = db_one("SELECT * FROM customers WHERE id=?", (cust_id,))
@@ -98,7 +82,7 @@ def auto_tag_customer(cust_id: int):
     if last_bill:
         try:
             ld = datetime.datetime.strptime(str(last_bill["date"])[:10], "%Y-%m-%d").date()
-            days_since = (datetime.date.today() - ld).days
+            days_since = (clock.today() - ld).days
         except Exception:
             pass
     if days_since > 30:
@@ -118,7 +102,7 @@ def validate_coupon(code: str, bill_total: float) -> tuple[float, str]:
     c = db_one("SELECT * FROM coupons WHERE code=? AND active=1", (code,))
     if not c:
         return 0.0, "Coupon not found or inactive."
-    today = datetime.date.today().strftime("%Y-%m-%d")
+    today = clock.today().strftime("%Y-%m-%d")
     if c["expiry"] and str(c["expiry"]) < today:
         return 0.0, f"Coupon expired on {c['expiry']}."
     if bill_total < c["min_bill"]:
@@ -130,120 +114,87 @@ def validate_coupon(code: str, bill_total: float) -> tuple[float, str]:
         disc = float(min(float(c.get("value", 0)), float(bill_total)))
         return disc, f"Flat {curr_sym()}{disc:.2f} off"
 
-def auto_suggest_coupon(bill_total: float) -> str:
-    today = datetime.date.today().strftime("%Y-%m-%d")
-    today_rev = sum(
-        float(r["total"]) for r in db_all("SELECT total FROM bills WHERE date LIKE ?", (f"{today}%",))
-    )
-    avgs = get_weekly_day_avg()
-    wd = datetime.date.today().weekday()
-    day_avg = avgs.get(wd, 0)
-    if day_avg > 0 and today_rev < day_avg * 0.5:
-        coupons = db_all("SELECT code FROM coupons WHERE active=1 AND (expiry='' OR expiry>=?)", (today,))
-        if coupons:
-            return f"Slow day — try coupon: {coupons[0]['code']}"
-    return ""
-
-def get_month_target(year: int, month: int, staff_id: int = 0) -> float:
-    period = f"{year:04d}-{month:02d}"
-    row = db_one("SELECT target_amt FROM sales_targets WHERE period=? AND staff_id=?", (period, staff_id))
-    return float(row["target_amt"]) if row else 0.0
-
 def get_month_revenue(year: int, month: int) -> float:
     rows = db_all("SELECT total FROM bills WHERE date LIKE ?", (f"{year:04d}-{month:02d}-%",))
     return sum(float(r["total"]) for r in rows)
-
-def get_working_days_left(year: int, month: int) -> int:
-    today = datetime.date.today()
-    last = calendar.monthrange(year, month)[1]
-    holidays_set = {r["date"] for r in db_all("SELECT date FROM holidays")}
-    count = 0
-    for d in range(today.day + 1, last + 1):
-        ds = f"{year:04d}-{month:02d}-{d:02d}"
-        if ds not in holidays_set:
-            count += 1
-    return count
-
-def required_daily_sales(year: int, month: int) -> float:
-    target = get_month_target(year, month)
-    current = get_month_revenue(year, month)
-    remaining = max(0.0, target - current)
-    days_left = get_working_days_left(year, month)
-    if days_left == 0:
-        return remaining
-    return remaining / days_left
-
-def get_staff_sales(staff_id: int, year: int, month: int) -> float:
-    rows = db_all("SELECT total FROM bills WHERE staff_id=? AND date LIKE ?",
-                  (staff_id, f"{year:04d}-{month:02d}-%"))
-    return sum(float(r["total"]) for r in rows)
-
-def calc_overtime(staff_id: int, date_str: str) -> float:
-    att = db_one("SELECT * FROM attendance WHERE staff_id=? AND date=?", (staff_id, date_str))
-    if att is None:
-        return 0.0
-    clock_out = att.get("clock_out")
-    if not att.get("clock_in") or not clock_out:
-        return 0.0
-    st = db_one("SELECT shift_end FROM staff WHERE id=?", (staff_id,))
-    if st is None:
-        return 0.0
-    shift_end = st.get("shift_end")
-    if not shift_end:
-        return 0.0
-    try:
-        def _mins(t: str) -> int:
-            parts = str(t).split(":")
-            if len(parts) >= 2:
-                return int(parts[0]) * 60 + int(parts[1])
-            return 0
-        out_mins = _mins(str(clock_out))
-        shift_mins = _mins(str(shift_end))
-        return rnd(float(max(0.0, (out_mins - shift_mins) / 60.0)), 2)
-    except Exception:
-        return 0.0
 
 def get_month_expenses(year: int, month: int) -> float:
     rows = db_all("SELECT amount FROM expenses WHERE date LIKE ?", (f"{year:04d}-{month:02d}-%",))
     return sum(float(r["amount"]) for r in rows)
 
-def get_month_profit(year: int, month: int) -> float:
-    return get_month_revenue(year, month) - get_month_expenses(year, month)
+# The one rule for "low stock", used by the dashboard count, the product badges and the
+# reorder list: fewer units on hand than the product's reorder level (zero and negative count
+# as low; a reorder level of 0 switches the alert off). New products start at LOW_STOCK_LEVEL.
+LOW_STOCK_LEVEL = DEFAULT_REORDER_LEVEL
+
+def is_low_stock(quantity, reorder_level=LOW_STOCK_LEVEL) -> bool:
+    return quantity < reorder_level
+
+def get_low_stock_count() -> int:
+    return db_one("SELECT COUNT(*) AS count FROM products WHERE quantity < reorder_level")["count"]
+
+def suggested_order_qty(quantity, reorder_level) -> int:
+    """Enough to bring stock back up to twice the reorder level."""
+    return max(2 * int(reorder_level) - int(quantity), 1)
 
 def get_reorder_suggestions() -> list:
-    pending_ids = {r["product_id"] for r in
-                   db_all("SELECT product_id FROM purchase_orders WHERE status='Pending'")
-                   if r["product_id"]}
-    low = db_all("SELECT * FROM products WHERE quantity < 5 AND quantity >= 0")
-    return [p for p in low if p["id"] not in pending_ids]
+    on_order = {r["product_id"] for r in
+                db_all("SELECT product_id FROM purchase_orders WHERE status IN ('Pending', 'Partly received')")
+                if r["product_id"]}
+    low = db_all("SELECT p.*, COALESCE(s.name, '') AS supplier_name FROM products p "
+                 "LEFT JOIN suppliers s ON s.id = p.supplier_id WHERE p.quantity < p.reorder_level ORDER BY p.id")
+    for p in low:
+        p["suggested_qty"] = suggested_order_qty(p["quantity"], p["reorder_level"])
+    return [p for p in low if p["id"] not in on_order]
 
 def get_cash_balance(date_str: str) -> dict:
+    """Expected drawer balance: opening + cash sales - cash refunds - expenses.
+
+    Refunds keep the payment mode of the original bill, so only Cash-mode
+    refunds come out of the drawer."""
     reg = db_one("SELECT opening_cash FROM cash_register WHERE date=?", (date_str,))
     opening = float(reg["opening_cash"]) if reg else 0.0
     sales_cash = sum(
         float(r["total"]) for r in db_all(
-            "SELECT total FROM bills WHERE date LIKE ? AND payment_mode='Cash'", (f"{date_str}%",))
+            "SELECT total FROM bills WHERE date LIKE ? AND payment_mode='Cash' AND total >= 0", (f"{date_str}%",))
+    )
+    refunds = sum(
+        abs(float(r["total"])) for r in db_all(
+            "SELECT total FROM bills WHERE date LIKE ? AND payment_mode='Cash' AND total < 0", (f"{date_str}%",))
     )
     exp_cash = sum(
         float(r["amount"]) for r in db_all("SELECT amount FROM expenses WHERE date=?", (date_str,))
     )
-    refunds = sum(
-        float(r["total"]) for r in db_all(
-            "SELECT total FROM bills WHERE date LIKE ? AND total < 0", (f"{date_str}%",))
-    )
-    closing = opening + sales_cash + exp_cash + refunds
+    closing = opening + sales_cash - refunds - exp_cash
     return {"opening": opening, "sales_cash": sales_cash,
-            "expenses": exp_cash, "refunds": abs(float(refunds)), "closing": closing}
+            "expenses": exp_cash, "refunds": refunds, "closing": closing}
 
-def get_category_revenue(year: int, month: int) -> dict:
-    rows = db_all(
-        "SELECT p.category, SUM(bi.price * bi.qty) AS rev "
-        "FROM bill_items bi LEFT JOIN products p ON bi.product_id = p.id "
-        "JOIN bills b ON bi.bill_id = b.id "
-        "WHERE b.date LIKE ? AND b.total >= 0 GROUP BY p.category",
-        (f"{year:04d}-{month:02d}-%",)
-    )
-    return {r["category"] or "General": float(r["rev"]) for r in rows}
+def compute_bill_totals(lines: list, discount: float = 0.0) -> dict:
+    """Subtotal, discount, GST and total for cart lines of {price, qty, gst_rate}.
+
+    The discount is clamped to the subtotal and spread across lines pro rata,
+    so every line is taxed at its own GST rate on its discounted value."""
+    subtotal = sum(float(l["price"]) * int(l["qty"]) for l in lines)
+    discount = min(max(float(discount), 0.0), subtotal)
+    keep = (subtotal - discount) / subtotal if subtotal > 0 else 0.0
+    tax = sum(float(l["price"]) * int(l["qty"]) * keep * float(l["gst_rate"]) / 100.0 for l in lines)
+    return {"subtotal": rnd(subtotal), "discount": rnd(discount), "tax": rnd(tax),
+            "total": rnd(rnd(subtotal - discount) + rnd(tax))}
+
+def find_refund(bill_id: int, conn=None) -> dict | None:
+    """The refund bill already issued against bill_id, if any.
+
+    Pass conn to run inside an open transaction so the check and the refund
+    insert are atomic. Uses the refund_of column first (new data), falling back
+    to the note pattern (older data)."""
+    bid = int(bill_id)
+    # Try the structured column first, then the legacy note pattern.
+    sql = ("SELECT id FROM bills WHERE (refund_of = ? OR (total < 0 AND note LIKE ?)) LIMIT 1")
+    params = (bid, f"REFUND of Bill #{bid}:%")
+    if conn is None:
+        return db_one(sql, params)
+    row = conn.execute(sql, params).fetchone()
+    return dict(row) if row else None
 
 def get_cohort_data() -> list:
     all_rows = db_all("SELECT customer_id, date FROM bills WHERE customer_id IS NOT NULL ORDER BY date")
@@ -297,7 +248,7 @@ def get_breakeven(year: int, month: int) -> dict:
     fixed = get_month_expenses(year, month)
     rev   = get_month_revenue(year, month)
     top = db_one(
-        "SELECT bi.name, bi.price, SUM(bi.qty) AS total_qty, SUM(bi.price*bi.qty) AS total_rev "
+        "SELECT bi.name, MAX(bi.price) AS price, SUM(bi.qty) AS total_qty, SUM(bi.price*bi.qty) AS total_rev "
         "FROM bill_items bi JOIN bills b ON bi.bill_id=b.id "
         "WHERE b.date LIKE ? AND b.total>=0 "
         "GROUP BY bi.name ORDER BY total_rev DESC LIMIT 1",

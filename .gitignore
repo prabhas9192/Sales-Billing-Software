@@ -37,6 +37,22 @@ exports/
 *.db-wal
 *.db-shm
 
+# Local-only: research notes and sample mock-ups from design work, tool scratch space
+research_notes/
+samples/
+tmp/
+.claude/
+
+# Secrets and logs
+.env
+.env.*
+*.log
+
+# Test and coverage output
+.pytest_cache/
+.coverage
+htmlcov/
+
 # Archives
 *.zip
 *.tar.gz
@@ -45,5 +61,6 @@ exports/
 .vscode/
 .idea/
 .DS_Store
+Thumbs.db
 *.swp
 *~

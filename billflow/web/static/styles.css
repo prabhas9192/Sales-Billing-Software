@@ -509,7 +509,7 @@ body {
 
 @media (max-width: 1024px) {
   .dashboard-grid, .grid-equal-2 {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
@@ -632,8 +632,9 @@ body {
 }
 
 @media (max-width: 1100px) {
+  /* minmax(0, ...) lets the track shrink below the width of the scrolling chip row */
   .pos-layout {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     height: auto;
   }
 }
@@ -1071,3 +1072,324 @@ body {
 .receipt-paper .r-center { text-align: center; }
 .receipt-paper .r-divider { border-top: 1px dashed #666; margin: 8px 0; }
 .receipt-paper .r-row { display: flex; justify-content: space-between; }
+
+/* ---------------- Phones & tablets ---------------- */
+
+body {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.menu-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  cursor: pointer;
+}
+
+.menu-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+.sidebar-backdrop {
+  display: none;
+}
+
+.mobile-cart-bar {
+  display: none;
+  position: fixed;
+  left: 12px;
+  right: 12px;
+  bottom: calc(12px + env(safe-area-inset-bottom));
+  z-index: 900;
+  align-items: center;
+  justify-content: space-between;
+  padding: 13px 16px;
+  background: var(--accent);
+  color: var(--accent-fg);
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  font-weight: 700;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+  cursor: pointer;
+}
+
+@media (pointer: coarse) {
+  .qty-btn { width: 34px; height: 34px; font-size: 1rem; }
+  .quick-btn { padding: 9px 14px; }
+  .nav-item { padding: 11px 12px; }
+  .cat-chip { padding: 8px 14px; }
+  .cart-item-total { width: 78px; }
+}
+
+@media (max-width: 820px) {
+  /* Sidebar becomes a drawer opened from the menu button */
+  .app-container {
+    height: 100vh;
+    height: 100dvh;
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1100;
+    width: min(280px, 85vw);
+    height: 100vh;
+    height: 100dvh;
+    transform: translateX(-100%);
+    transition: transform 0.2s ease;
+    box-shadow: var(--shadow);
+  }
+
+  [data-sidebar-pos="right"] .sidebar {
+    left: auto;
+    right: 0;
+    transform: translateX(100%);
+  }
+
+  body.sidebar-open .sidebar {
+    transform: translateX(0);
+  }
+
+  .sidebar-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 1050;
+    background: rgba(0, 0, 0, 0.6);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+  }
+
+  body.sidebar-open .sidebar-backdrop {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .menu-btn {
+    display: inline-flex;
+  }
+
+  /* Header: title on the left, New Sale on the right. The + Product / Customer /
+     Expense shortcuts are also on their own pages. */
+  .top-header {
+    height: auto;
+    min-height: 56px;
+    padding: 8px 12px;
+    padding-top: calc(8px + env(safe-area-inset-top));
+    gap: 8px;
+  }
+
+  .header-left {
+    flex: 1 1 0%;
+    min-width: 0;
+    gap: 10px;
+  }
+
+  .page-title {
+    font-size: 0.98rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .header-right > .quick-btn:not(.primary) {
+    display: none;
+  }
+
+  .header-right .quick-btn {
+    white-space: nowrap;
+  }
+
+  .content-area {
+    padding: 14px 12px calc(28px + env(safe-area-inset-bottom));
+  }
+
+  body[data-view="pos"] .content-area {
+    padding-bottom: 88px;
+  }
+
+  .card-panel {
+    padding: 14px;
+  }
+
+  .card-panel-header {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  /* Filter rows (dates plus a button) wrap onto a second line */
+  .card-panel-header > div[style*="display:flex"] {
+    flex-wrap: wrap;
+  }
+
+  .kpi-grid, .grid-equal-2, .grid-equal-3, .dashboard-grid {
+    gap: 12px;
+  }
+
+  #view-settings > div {
+    grid-template-columns: 1fr !important;
+  }
+
+  #view-settings div[style*="grid-template-columns:1fr 1fr"],
+  .modal-body div[style*="grid-template-columns:1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Tables scroll sideways inside their card instead of squashing */
+  .modern-table th, .modern-table td {
+    padding: 9px 10px;
+    white-space: nowrap;
+  }
+
+  /* POS: products first, then the cart; the bar at the bottom jumps to the cart */
+  .pos-layout {
+    gap: 14px;
+  }
+
+  .pos-catalog {
+    overflow: visible;
+  }
+
+  .pos-product-grid {
+    grid-template-columns: repeat(2, 1fr);
+    flex: none;
+    max-height: 62vh;
+    padding-right: 0;
+  }
+
+  .pos-cart-panel {
+    height: auto;
+  }
+
+  .cart-items-list {
+    max-height: 40vh;
+  }
+
+  body[data-view="pos"] .mobile-cart-bar:not([hidden]) {
+    display: flex;
+  }
+
+  /* 16px inputs stop iOS Safari zooming the page when a field is focused */
+  input, select, textarea, .modern-input {
+    font-size: 16px !important;
+  }
+
+  .modern-input {
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  .modal-overlay {
+    padding: 12px;
+  }
+
+  .modal-card {
+    max-height: calc(100vh - 24px);
+    max-height: calc(100dvh - 24px);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .modal-body {
+    max-height: none;
+    flex: 1 1 auto;
+    min-height: 0;
+    padding: 16px;
+  }
+
+  .calendar-grid {
+    gap: 4px;
+  }
+
+  .cal-day-box {
+    padding: 4px;
+    min-height: 48px;
+    overflow: hidden;
+  }
+
+  .cal-day-num, .cal-day-amt {
+    font-size: 0.62rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .page-title {
+    font-size: 0.9rem;
+  }
+
+  .kpi-value {
+    font-size: 1.45rem;
+  }
+}
+
+/* Staff sign-in chip, toast, archived and oversold states */
+.staff-chip {
+  display: inline-flex;
+  align-items: center;
+  max-width: 180px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border: 1px dashed var(--border);
+  background: transparent;
+  color: var(--text-dim);
+}
+
+.staff-chip.signed-in {
+  border-style: solid;
+  border-color: var(--accent);
+  background: var(--accent-muted);
+  color: var(--accent);
+}
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: calc(24px + env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  z-index: 1000;
+  max-width: min(520px, calc(100vw - 32px));
+  padding: 10px 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--warning);
+  background: var(--card);
+  color: var(--text);
+  font-size: 0.82rem;
+  font-weight: 600;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+.toast.ok { border-color: var(--accent); }
+
+tr.row-archived td { opacity: 0.55; }
+tr.row-archived td:last-child { opacity: 1; }
+
+.cart-oversold {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--warning);
+  margin-top: 2px;
+}
+
+.prod-stock.oversold { color: var(--warning); font-weight: 700; }
+
+@media (max-width: 820px) {
+  .header-right > .staff-chip { display: inline-flex; max-width: 120px; }
+}

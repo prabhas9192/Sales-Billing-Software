@@ -5,44 +5,35 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_DIR = os.path.join(BASE_DIR, "data")
 os.makedirs(DATA_DIR, exist_ok=True)
 
-DB_PATH = os.path.join(DATA_DIR, "billflow.db")
 SETTINGS_FILE = os.path.join(DATA_DIR, "billflow_settings.json")
 
-# Fallback: if old DB exists in PROTOTYPE/billflow.db, migrate or allow usage
-OLD_DB_PATH = os.path.join(BASE_DIR, "PROTOTYPE", "billflow.db")
-if os.path.exists(OLD_DB_PATH) and not os.path.exists(DB_PATH):
-    import shutil
-    try:
-        shutil.copy2(OLD_DB_PATH, DB_PATH)
-    except Exception:
-        pass
-
-# Supported Currencies
+# Currencies, by ISO code. "locale" decides how digits are grouped (1,00,000 or 100,000).
 CURRENCIES = {
-    "INR — ₹  India":        {"symbol": "₹",  "code": "INR"},
-    "USD — $  United States":{"symbol": "$",  "code": "USD"},
-    "EUR — €  Euro Zone":    {"symbol": "€",  "code": "EUR"},
-    "GBP — £  UK":           {"symbol": "£",  "code": "GBP"},
-    "JPY — ¥  Japan":        {"symbol": "¥",  "code": "JPY"},
-    "CNY — ¥  China":        {"symbol": "¥",  "code": "CNY"},
-    "AED — د.إ  UAE":        {"symbol": "د.إ","code": "AED"},
-    "SGD — S$  Singapore":   {"symbol": "S$", "code": "SGD"},
-    "AUD — A$  Australia":   {"symbol": "A$", "code": "AUD"},
-    "CAD — C$  Canada":      {"symbol": "C$", "code": "CAD"},
-    "BRL — R$  Brazil":      {"symbol": "R$", "code": "BRL"},
-    "ZAR — R   South Africa":{"symbol": "R",  "code": "ZAR"},
-    "NGN — ₦  Nigeria":      {"symbol": "₦",  "code": "NGN"},
-    "KES — Ksh Kenya":       {"symbol": "Ksh","code": "KES"},
-    "PKR — ₨  Pakistan":     {"symbol": "₨",  "code": "PKR"},
-    "BDT — ৳  Bangladesh":   {"symbol": "৳",  "code": "BDT"},
+    "INR": {"symbol": "₹",   "name": "Indian Rupee",       "locale": "en-IN"},
+    "USD": {"symbol": "$",   "name": "US Dollar",          "locale": "en-US"},
+    "EUR": {"symbol": "€",   "name": "Euro",               "locale": "en-US"},
+    "GBP": {"symbol": "£",   "name": "British Pound",      "locale": "en-GB"},
+    "AED": {"symbol": "AED", "name": "UAE Dirham",         "locale": "en-US"},
+    "SGD": {"symbol": "S$",  "name": "Singapore Dollar",   "locale": "en-US"},
+    "AUD": {"symbol": "A$",  "name": "Australian Dollar",  "locale": "en-US"},
+    "CAD": {"symbol": "C$",  "name": "Canadian Dollar",    "locale": "en-US"},
+    "JPY": {"symbol": "¥",   "name": "Japanese Yen",       "locale": "en-US"},
+    "CNY": {"symbol": "CN¥", "name": "Chinese Yuan",       "locale": "en-US"},
+    "BRL": {"symbol": "R$",  "name": "Brazilian Real",     "locale": "en-US"},
+    "ZAR": {"symbol": "R",   "name": "South African Rand", "locale": "en-US"},
+    "NGN": {"symbol": "₦",   "name": "Nigerian Naira",     "locale": "en-US"},
+    "KES": {"symbol": "Ksh", "name": "Kenyan Shilling",    "locale": "en-US"},
+    "PKR": {"symbol": "₨",   "name": "Pakistani Rupee",    "locale": "en-IN"},
+    "BDT": {"symbol": "৳",   "name": "Bangladeshi Taka",   "locale": "en-IN"},
 }
 
 DEFAULT_SETTINGS = {
-    "theme": "Shadcn Dark",
-    "currency": "INR — ₹  India",
-    "shop_name": "BillFlow Store",
-    "shop_phone": "+91 98765 43210",
-    "shop_address": "Tech District, Innovation Hub",
+    "currency": "INR",
+    "timezone": "",            # an IANA name such as "Asia/Kolkata"; empty means this computer's own
+    "shop_name": "My Shop",
+    "shop_phone": "",
+    "shop_address": "",
+    "shop_gstin": "",
 }
 
 def load_settings() -> dict:
@@ -64,13 +55,11 @@ def save_settings(settings_dict: dict):
 
 APP_SETTINGS = load_settings()
 
-def curr_sym() -> str:
-    """Return the active currency symbol, e.g. '₹' or '$'."""
-    return CURRENCIES.get(APP_SETTINGS.get("currency", "INR — ₹  India"), {"symbol": "₹"})["symbol"]
+def currency_code() -> str:
+    """The active currency's ISO code. Settings saved by older versions held a longer label such as 'INR — ₹  India'."""
+    value = str(APP_SETTINGS.get("currency", "INR"))
+    return value if value in CURRENCIES else (value[:3] if value[:3] in CURRENCIES else "INR")
 
-# Typography
-F_TITLE = ("Segoe UI", 16, "bold")
-F_HEAD  = ("Segoe UI", 11, "bold")
-F_BODY  = ("Segoe UI", 10)
-F_SMALL = ("Segoe UI",  9)
-F_MONO  = ("Consolas", 10)
+def curr_sym() -> str:
+    """The active currency's symbol, e.g. '₹' or '$'."""
+    return CURRENCIES[currency_code()]["symbol"]
