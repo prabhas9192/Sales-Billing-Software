@@ -581,24 +581,24 @@ THEMES = {
     },
 }
 
-# ── Currencies with flag emoji ──────────────────────────────────
+# ── Currencies ──────────────────────────────────
 CURRENCIES = {
-    "INR — ₹  India":        {"symbol": "₹",  "code": "INR", "flag": "🇮🇳"},
-    "USD — $  United States":{"symbol": "$",  "code": "USD", "flag": "🇺🇸"},
-    "EUR — €  Euro Zone":    {"symbol": "€",  "code": "EUR", "flag": "🇪🇺"},
-    "GBP — £  UK":           {"symbol": "£",  "code": "GBP", "flag": "🇬🇧"},
-    "JPY — ¥  Japan":        {"symbol": "¥",  "code": "JPY", "flag": "🇯🇵"},
-    "CNY — ¥  China":        {"symbol": "¥",  "code": "CNY", "flag": "🇨🇳"},
-    "AED — د.إ  UAE":        {"symbol": "د.إ","code": "AED", "flag": "🇦🇪"},
-    "SGD — S$  Singapore":   {"symbol": "S$", "code": "SGD", "flag": "🇸🇬"},
-    "AUD — A$  Australia":   {"symbol": "A$", "code": "AUD", "flag": "🇦🇺"},
-    "CAD — C$  Canada":      {"symbol": "C$", "code": "CAD", "flag": "🇨🇦"},
-    "BRL — R$  Brazil":      {"symbol": "R$", "code": "BRL", "flag": "🇧🇷"},
-    "ZAR — R   South Africa":{"symbol": "R",  "code": "ZAR", "flag": "🇿🇦"},
-    "NGN — ₦  Nigeria":      {"symbol": "₦",  "code": "NGN", "flag": "🇳🇬"},
-    "KES — Ksh Kenya":       {"symbol": "Ksh","code": "KES", "flag": "🇰🇪"},
-    "PKR — ₨  Pakistan":     {"symbol": "₨",  "code": "PKR", "flag": "🇵🇰"},
-    "BDT — ৳  Bangladesh":   {"symbol": "৳",  "code": "BDT", "flag": "🇧🇩"},
+    "INR — ₹  India":        {"symbol": "₹",  "code": "INR", "flag": "[IN]"},
+    "USD — $  United States":{"symbol": "$",  "code": "USD", "flag": "[US]"},
+    "EUR — €  Euro Zone":    {"symbol": "€",  "code": "EUR", "flag": "[EU]"},
+    "GBP — £  UK":           {"symbol": "£",  "code": "GBP", "flag": "[GB]"},
+    "JPY — ¥  Japan":        {"symbol": "¥",  "code": "JPY", "flag": "[JP]"},
+    "CNY — ¥  China":        {"symbol": "¥",  "code": "CNY", "flag": "[CN]"},
+    "AED — د.إ  UAE":        {"symbol": "د.إ","code": "AED", "flag": "[AE]"},
+    "SGD — S$  Singapore":   {"symbol": "S$", "code": "SGD", "flag": "[SG]"},
+    "AUD — A$  Australia":   {"symbol": "A$", "code": "AUD", "flag": "[AU]"},
+    "CAD — C$  Canada":      {"symbol": "C$", "code": "CAD", "flag": "[CA]"},
+    "BRL — R$  Brazil":      {"symbol": "R$", "code": "BRL", "flag": "[BR]"},
+    "ZAR — R   South Africa":{"symbol": "R",  "code": "ZAR", "flag": "[ZA]"},
+    "NGN — ₦  Nigeria":      {"symbol": "₦",  "code": "NGN", "flag": "[NG]"},
+    "KES — Ksh Kenya":       {"symbol": "Ksh","code": "KES", "flag": "[KE]"},
+    "PKR — ₨  Pakistan":     {"symbol": "₨",  "code": "PKR", "flag": "[PK]"},
+    "BDT — ৳  Bangladesh":   {"symbol": "৳",  "code": "BDT", "flag": "[BD]"},
 }
 
 # ── App-level mutable settings (loaded/saved to a tiny JSON) ───

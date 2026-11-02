@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "billflow"
+version = "6.0.0"
+description = "Modern Point of Sale (POS), Inventory & Financial Management Suite"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [
+    { name = "Prabhas" }
+]
+keywords = ["pos", "billing", "retail", "inventory", "sales", "analytics", "gst", "shadcn"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: X11 Applications",
+    "Environment :: Web Environment",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Office/Business :: Financial :: Point-Of-Sale",
+]
+dependencies = [
+    "matplotlib>=3.7.0",
+    "pillow>=9.5.0",
+]
+
+[project.optional-dependencies]
+desktop = [
+    "PySide6>=6.5.0",
+]
+
+[project.scripts]
+billflow = "run_modern:main"
+billflow-classic = "run:main"
