@@ -3,360 +3,638 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BillFlow ⚡ Next-Gen POS & Sales Dashboard</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+  <title>BillFlow - Enterprise POS & Business Management</title>
   <link rel="stylesheet" href="styles.css">
   <script src="chart.min.js"></script>
 </head>
 <body>
 
   <div class="app-container">
-    <!-- Sidebar -->
+    <!-- Left Navigation Sidebar -->
     <aside class="sidebar">
       <div class="sidebar-header">
-        <div class="logo-badge">⚡</div>
+        <div class="logo-badge">BF</div>
         <div class="logo-text">
           <h1>BillFlow</h1>
-          <span>Sales & POS System</span>
+          <span>Sales & Operations</span>
         </div>
       </div>
 
-      <div class="nav-section">
-        <div class="nav-section-title">Core Operations</div>
-        <ul class="nav-list">
-          <li class="nav-item active" data-view="overview">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
-            Dashboard
-          </li>
-          <li class="nav-item" data-view="pos">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-            POS Terminal
-          </li>
-        </ul>
-      </div>
+      <div class="sidebar-scroll">
+        <!-- Core Section -->
+        <div class="nav-section">
+          <div class="nav-section-title">Core Operations</div>
+          <ul class="nav-list">
+            <li class="nav-item active" data-view="overview">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+              Dashboard
+            </li>
+            <li class="nav-item" data-view="pos">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+              POS Terminal
+            </li>
+            <li class="nav-item" data-view="products">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+              Products & Stock
+            </li>
+            <li class="nav-item" data-view="customers">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+              Customer CRM
+            </li>
+            <li class="nav-item" data-view="coupons">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>
+              Coupons
+            </li>
+          </ul>
+        </div>
 
-      <div class="nav-section">
-        <div class="nav-section-title">Inventory & CRM</div>
-        <ul class="nav-list">
-          <li class="nav-item" data-view="products">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
-            Inventory Studio
-          </li>
-          <li class="nav-item" data-view="customers">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-            Customer CRM
-          </li>
-          <li class="nav-item" data-view="analytics">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
-            Financial Analytics
-          </li>
-        </ul>
+        <!-- Operations Section -->
+        <div class="nav-section">
+          <div class="nav-section-title">Store Operations</div>
+          <ul class="nav-list">
+            <li class="nav-item" data-view="eod">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+              End of Day (EOD)
+            </li>
+            <li class="nav-item" data-view="cash_register">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+              Cash Register
+            </li>
+            <li class="nav-item" data-view="purchase_orders">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
+              Stock Orders
+            </li>
+            <li class="nav-item" data-view="refunds">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16 15v-1a4 4 0 00-4-4H4m0 0l3-3m-3 3l3 3m5 4v1a3 3 0 003 3h4a3 3 0 003-3v-1"/></svg>
+              Refunds & Returns
+            </li>
+          </ul>
+        </div>
+
+        <!-- People & HR Section -->
+        <div class="nav-section">
+          <div class="nav-section-title">People & HR</div>
+          <ul class="nav-list">
+            <li class="nav-item" data-view="staff">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+              Staff Directory
+            </li>
+            <li class="nav-item" data-view="roster">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+              Shift Roster
+            </li>
+            <li class="nav-item" data-view="salary">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              Payroll & Slips
+            </li>
+            <li class="nav-item" data-view="targets">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+              Sales Targets
+            </li>
+            <li class="nav-item" data-view="expenses">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              Store Expenses
+            </li>
+            <li class="nav-item" data-view="holidays">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M19 3v4M5 11h14M5 19h14M5 7h14a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V9a2 2 0 012-2z"/></svg>
+              Holidays
+            </li>
+          </ul>
+        </div>
+
+        <!-- Analytics Section -->
+        <div class="nav-section">
+          <div class="nav-section-title">Analytics & Reports</div>
+          <ul class="nav-list">
+            <li class="nav-item" data-view="calendar">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+              Sales Calendar
+            </li>
+            <li class="nav-item" data-view="gst">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+              GST Tax Report
+            </li>
+            <li class="nav-item" data-view="breakeven">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 6l3 18h12l3-18H3zm16 6H5"/></svg>
+              Break-Even Analysis
+            </li>
+            <li class="nav-item" data-view="insights">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+              Business Insights
+            </li>
+            <li class="nav-item" data-view="analytics_plus">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/></svg>
+              Day & Peak Patterns
+            </li>
+            <li class="nav-item" data-view="settings">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+              Settings & Export
+            </li>
+          </ul>
+        </div>
       </div>
 
       <div class="sidebar-footer">
         <div class="theme-selector-box">
           <span style="color:var(--text-dim); font-size:0.75rem;">Theme:</span>
           <select id="theme-select" class="theme-select">
-            <option value="zinc-dark">Zinc Dark (shadcn)</option>
-            <option value="zinc-light">Zinc Light (Clean)</option>
-            <option value="emerald-dark">Emerald Fintech</option>
-            <option value="violet-dark">Violet Modern</option>
+            <option value="zinc-dark">Zinc Dark</option>
+            <option value="zinc-light">Zinc Light</option>
+            <option value="emerald-dark">Emerald Dark</option>
+            <option value="violet-dark">Violet Dark</option>
           </select>
         </div>
         <div class="db-pill">
           <span class="status-dot"></span>
-          <span>SQLite Connected (206 Bills)</span>
+          <span>SQLite Connected</span>
         </div>
       </div>
     </aside>
 
     <!-- Main Content Area -->
     <main class="main-wrapper">
-      <!-- Top Header -->
       <header class="top-header">
         <div class="header-left">
           <h2 id="current-page-title" class="page-title">Executive Dashboard</h2>
         </div>
         <div class="header-right">
-          <button class="quick-btn" onclick="openModal('add-product-modal')">
-            <span>+ Product</span>
-          </button>
-          <button class="quick-btn" onclick="openModal('add-customer-modal')">
-            <span>+ Customer</span>
-          </button>
-          <button class="quick-btn primary" onclick="switchView('pos')">
-            <span>⚡ New Sale (POS)</span>
-          </button>
+          <button class="quick-btn" onclick="openModal('add-product-modal')">+ Product</button>
+          <button class="quick-btn" onclick="openModal('add-customer-modal')">+ Customer</button>
+          <button class="quick-btn" onclick="openModal('add-expense-modal')">+ Expense</button>
+          <button class="quick-btn primary" onclick="switchView('pos')">New Sale (POS)</button>
         </div>
       </header>
 
-      <!-- Scrollable Views Content -->
       <div class="content-area">
 
-        <!-- VIEW 1: OVERVIEW DASHBOARD -->
+        <!-- 1. OVERVIEW DASHBOARD -->
         <div id="view-overview" class="view-panel active">
-          <!-- 4 KPI Cards (shadcn SectionCards) -->
           <div class="kpi-grid">
             <div class="kpi-card">
-              <div class="kpi-header">
-                <span class="kpi-title">Total Revenue</span>
-                <span class="kpi-pill up">↗ +14.8%</span>
-              </div>
-              <div id="kpi-revenue" class="kpi-value">₹0.00</div>
-              <div class="kpi-subtext">Seeded database revenue</div>
+              <div class="kpi-header"><span class="kpi-title">Total Revenue</span><span class="kpi-pill up">+14.8%</span></div>
+              <div id="kpi-revenue" class="kpi-value">0.00</div>
+              <div class="kpi-subtext">Lifetime store billing</div>
             </div>
-
             <div class="kpi-card">
-              <div class="kpi-header">
-                <span class="kpi-title">Total Transactions</span>
-                <span class="kpi-pill up">↗ +8.2%</span>
-              </div>
+              <div class="kpi-header"><span class="kpi-title">Invoices</span><span class="kpi-pill up">+8.2%</span></div>
               <div id="kpi-bills" class="kpi-value">0</div>
-              <div class="kpi-subtext">Completed invoices</div>
+              <div class="kpi-subtext">Processed transactions</div>
             </div>
-
             <div class="kpi-card">
-              <div class="kpi-header">
-                <span class="kpi-title">Avg Order Value</span>
-                <span class="kpi-pill up">↗ +4.1%</span>
-              </div>
-              <div id="kpi-aov" class="kpi-value">₹0.00</div>
-              <div class="kpi-subtext">Across all sales</div>
+              <div class="kpi-header"><span class="kpi-title">Avg Order Value</span><span class="kpi-pill up">+4.1%</span></div>
+              <div id="kpi-aov" class="kpi-value">0.00</div>
+              <div class="kpi-subtext">Average per checkout</div>
             </div>
-
             <div class="kpi-card">
-              <div class="kpi-header">
-                <span class="kpi-title">Inventory Alerts</span>
-                <span class="kpi-pill warning">⚡ Attention</span>
-              </div>
+              <div class="kpi-header"><span class="kpi-title">Inventory Alerts</span><span class="kpi-pill warning">Attention</span></div>
               <div id="kpi-stock" class="kpi-value">0</div>
-              <div class="kpi-subtext">Items below reorder point</div>
+              <div class="kpi-subtext">Items low on stock</div>
             </div>
           </div>
 
-          <!-- Charts and Leaderboard Grid -->
           <div class="dashboard-grid">
-            <!-- Revenue Timeline Chart -->
             <div class="card-panel">
               <div class="card-panel-header">
-                <div>
-                  <div class="card-panel-title">Revenue Trajectory</div>
-                  <div class="card-panel-desc">Daily sales performance & trends</div>
-                </div>
+                <div><div class="card-panel-title">Revenue Trajectory</div><div class="card-panel-desc">Daily sales performance</div></div>
                 <div style="font-size:0.75rem; color:var(--accent); font-weight:600;">Last 30 Days</div>
               </div>
-              <div style="height: 280px; position:relative;">
-                <canvas id="revenueChart"></canvas>
-              </div>
+              <div style="height: 260px; position:relative;"><canvas id="revenueChart"></canvas></div>
             </div>
 
-            <!-- Top Products -->
             <div class="card-panel">
               <div class="card-panel-header">
-                <div>
-                  <div class="card-panel-title">Top Sellers</div>
-                  <div class="card-panel-desc">Highest volume items</div>
-                </div>
+                <div><div class="card-panel-title">Top Sellers</div><div class="card-panel-desc">Highest volume items</div></div>
               </div>
-              <div id="top-products-list" style="margin-top: 10px;">
-                <!-- Populated via JS -->
-              </div>
+              <div id="top-products-list" style="margin-top: 10px;"></div>
             </div>
           </div>
 
-          <!-- Recent Transactions Table -->
           <div class="card-panel">
             <div class="card-panel-header">
-              <div>
-                <div class="card-panel-title">Recent Transactions</div>
-                <div class="card-panel-desc">Latest store bills and payment confirmations</div>
-              </div>
-              <button class="quick-btn" onclick="switchView('pos')">Go to Register</button>
+              <div><div class="card-panel-title">Recent Transactions</div><div class="card-panel-desc">Latest store bills</div></div>
+              <button class="quick-btn" onclick="switchView('pos')">Open Register</button>
             </div>
             <div class="table-container">
               <table class="modern-table">
-                <thead>
-                  <tr>
-                    <th>Invoice</th>
-                    <th>Date</th>
-                    <th>Customer</th>
-                    <th>Payment</th>
-                    <th>Total</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody id="recent-bills-tbody">
-                  <!-- Populated via JS -->
-                </tbody>
+                <thead><tr><th>Invoice</th><th>Date</th><th>Customer</th><th>Payment</th><th>Total</th><th>Action</th></tr></thead>
+                <tbody id="recent-bills-tbody"></tbody>
               </table>
             </div>
           </div>
         </div>
 
-        <!-- VIEW 2: POS TERMINAL -->
+        <!-- 2. POS TERMINAL -->
         <div id="view-pos" class="view-panel">
           <div class="pos-layout">
-            <!-- Catalog Side -->
             <div class="pos-catalog">
               <div class="pos-toolbar">
                 <div class="search-input-box">
-                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                  <input id="pos-search-input" type="text" class="modern-input" placeholder="Search by product name, barcode, or HSN...">
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                  <input id="pos-search-input" type="text" class="modern-input" placeholder="Search product name, barcode, or HSN...">
                 </div>
               </div>
-
-              <!-- Category filter pills -->
-              <div id="pos-category-chips" class="category-chips">
-                <!-- Populated via JS -->
-              </div>
-
-              <!-- Product Cards Grid -->
-              <div id="pos-products-grid" class="pos-product-grid">
-                <!-- Populated via JS -->
-              </div>
+              <div id="pos-category-chips" class="category-chips"></div>
+              <div id="pos-products-grid" class="pos-product-grid"></div>
             </div>
 
-            <!-- Sticky Cart Drawer -->
             <div class="pos-cart-panel">
               <div class="cart-header">
-                <div>
-                  <div style="font-weight:700; font-size:1rem;">Current Bill</div>
-                  <div id="cart-count-badge" style="font-size:0.75rem; color:var(--text-dim);">0 items</div>
-                </div>
-                <button class="quick-btn" style="padding:4px 8px; font-size:0.75rem;" onclick="state.cart=[]; renderCart();">Clear</button>
+                <div><div style="font-weight:700; font-size:0.95rem;">Current Cart</div><div id="cart-count-badge" style="font-size:0.72rem; color:var(--text-dim);">0 items</div></div>
+                <button class="quick-btn" style="padding:3px 8px; font-size:0.72rem;" onclick="state.cart=[]; renderCart();">Clear</button>
               </div>
-
-              <!-- Customer Select -->
-              <div style="padding:10px 18px; border-bottom:1px solid var(--border-subtle);">
-                <select id="pos-customer-select" class="modern-input" style="padding:6px 10px; font-size:0.8rem;">
-                  <!-- Options populated via JS -->
-                </select>
+              <div style="padding:8px 16px; border-bottom:1px solid var(--border-subtle);">
+                <select id="pos-customer-select" class="modern-input no-icon" style="padding:6px 10px; font-size:0.78rem;"></select>
               </div>
-
-              <!-- Cart Line Items -->
-              <div id="cart-items-list" class="cart-items-list">
-                <!-- Populated via JS -->
+              <div id="cart-items-list" class="cart-items-list"></div>
+              <div style="padding:8px 16px; border-top:1px solid var(--border-subtle); display:flex; gap:6px;">
+                <input id="pos-coupon-input" type="text" class="modern-input no-icon" placeholder="Coupon Code (e.g. FESTIVE20)" style="padding:6px 10px; font-size:0.78rem; text-transform:uppercase;">
+                <button id="apply-coupon-btn" class="quick-btn" style="padding:6px 10px; font-size:0.75rem;">Apply</button>
               </div>
-
-              <!-- Coupon Code Entry -->
-              <div style="padding:10px 18px; border-top:1px solid var(--border-subtle); display:flex; gap:8px;">
-                <input id="pos-coupon-input" type="text" class="modern-input" placeholder="Promo / Coupon (e.g. FESTIVE20)" style="padding:6px 10px; font-size:0.8rem; text-transform:uppercase;">
-                <button id="apply-coupon-btn" class="quick-btn" style="padding:6px 12px; font-size:0.8rem;">Apply</button>
-              </div>
-
-              <!-- Cart Summary & Checkout -->
               <div class="cart-summary">
-                <div class="summary-row">
-                  <span>Subtotal:</span>
-                  <span id="cart-subtotal">₹0.00</span>
-                </div>
-                <div class="summary-row">
-                  <span>Discount:</span>
-                  <span id="cart-discount" style="color:var(--accent)">-₹0.00</span>
-                </div>
-                <div class="summary-row">
-                  <span>GST Tax (18%):</span>
-                  <span id="cart-tax">₹0.00</span>
-                </div>
-                <div class="summary-row grand-total">
-                  <span>Total Amount:</span>
-                  <span id="cart-grand-total">₹0.00</span>
-                </div>
-                <button id="checkout-action-btn" class="checkout-btn" disabled>
-                  <span>Checkout & Bill</span>
-                  <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                </button>
+                <div class="summary-row"><span>Subtotal:</span><span id="cart-subtotal">0.00</span></div>
+                <div class="summary-row"><span>Discount:</span><span id="cart-discount" style="color:var(--accent)">-0.00</span></div>
+                <div class="summary-row"><span>GST Tax (18%):</span><span id="cart-tax">0.00</span></div>
+                <div class="summary-row grand-total"><span>Total Amount:</span><span id="cart-grand-total">0.00</span></div>
+                <button id="checkout-action-btn" class="checkout-btn" disabled onclick="openCheckoutModal()">Checkout</button>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- VIEW 3: INVENTORY STUDIO -->
+        <!-- 3. PRODUCTS & INVENTORY -->
         <div id="view-products" class="view-panel">
           <div class="card-panel">
             <div class="card-panel-header">
-              <div>
-                <div class="card-panel-title">Product Catalog & Stock Management</div>
-                <div class="card-panel-desc">Manage SKU pricing, tax codes, and warehouse replenishment</div>
-              </div>
-              <button class="quick-btn primary" onclick="openModal('add-product-modal')">+ Add New Product</button>
+              <div><div class="card-panel-title">Product Catalog & Inventory</div><div class="card-panel-desc">Manage SKU pricing, tax codes, and warehouse replenishment</div></div>
+              <button class="quick-btn primary" onclick="openModal('add-product-modal')">+ Add Product</button>
             </div>
             <div class="table-container">
               <table class="modern-table">
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Product Name</th>
-                    <th>Category</th>
-                    <th>Unit Price</th>
-                    <th>Status</th>
-                    <th>HSN</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody id="products-tbody">
-                  <!-- Populated via JS -->
-                </tbody>
+                <thead><tr><th>ID</th><th>Name</th><th>Category</th><th>Unit Price</th><th>Stock</th><th>HSN Code</th><th>Actions</th></tr></thead>
+                <tbody id="products-tbody"></tbody>
               </table>
             </div>
           </div>
         </div>
 
-        <!-- VIEW 4: CUSTOMER CRM -->
+        <!-- 4. CUSTOMER CRM -->
         <div id="view-customers" class="view-panel">
           <div class="card-panel">
             <div class="card-panel-header">
-              <div>
-                <div class="card-panel-title">Customer Relationship Management (CRM)</div>
-                <div class="card-panel-desc">Customer profiles, loyalty tiers, and lifetime expenditures</div>
-              </div>
+              <div><div class="card-panel-title">Customer Relationship Management</div><div class="card-panel-desc">Profiles, tiers, and purchase histories</div></div>
               <button class="quick-btn primary" onclick="openModal('add-customer-modal')">+ Add Customer</button>
             </div>
             <div class="table-container">
               <table class="modern-table">
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Customer Name</th>
-                    <th>Contact Phone</th>
-                    <th>Tier / Tag</th>
-                    <th>Lifetime Spent</th>
-                    <th>Orders Count</th>
-                  </tr>
-                </thead>
-                <tbody id="customers-tbody">
-                  <!-- Populated via JS -->
-                </tbody>
+                <thead><tr><th>ID</th><th>Name</th><th>Phone</th><th>Email</th><th>Tier</th><th>Total Spent</th><th>Visits</th></tr></thead>
+                <tbody id="customers-tbody"></tbody>
               </table>
             </div>
           </div>
         </div>
 
-        <!-- VIEW 5: FINANCIAL ANALYTICS -->
-        <div id="view-analytics" class="view-panel">
-          <div class="dashboard-grid">
-            <div class="card-panel">
-              <div class="card-panel-header">
-                <div>
-                  <div class="card-panel-title">Revenue Share by Category</div>
-                  <div class="card-panel-desc">Product distribution analysis</div>
-                </div>
-              </div>
-              <div style="height: 300px; position:relative;">
-                <canvas id="categoryChart"></canvas>
+        <!-- 5. COUPONS -->
+        <div id="view-coupons" class="view-panel">
+          <div class="card-panel">
+            <div class="card-panel-header">
+              <div><div class="card-panel-title">Promotions & Coupons</div><div class="card-panel-desc">Discount promo codes and minimum bill thresholds</div></div>
+              <button class="quick-btn primary" onclick="openModal('add-coupon-modal')">+ Add Coupon</button>
+            </div>
+            <div class="table-container">
+              <table class="modern-table">
+                <thead><tr><th>Code</th><th>Type</th><th>Value</th><th>Min Bill</th><th>Expiry</th><th>Status</th><th>Used</th><th>Actions</th></tr></thead>
+                <tbody id="coupons-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- 6. END OF DAY (EOD) -->
+        <div id="view-eod" class="view-panel">
+          <div class="card-panel">
+            <div class="card-panel-header">
+              <div><div class="card-panel-title">End of Day (EOD) Reconciliation</div><div class="card-panel-desc">Daily revenue closing, payment splits, and register balance</div></div>
+              <div style="display:flex; gap:8px;">
+                <input id="eod-date-input" type="date" class="modern-input no-icon" style="width:150px;">
+                <button class="quick-btn primary" onclick="loadEOD()">Load EOD</button>
+                <button class="quick-btn" onclick="window.print()">Print EOD</button>
               </div>
             </div>
+            <div class="kpi-grid">
+              <div class="kpi-card"><div class="kpi-title">Total Sales</div><div id="eod-rev" class="kpi-value">0.00</div></div>
+              <div class="kpi-card"><div class="kpi-title">Refunds Deducted</div><div id="eod-refunds" class="kpi-value" style="color:var(--danger)">0.00</div></div>
+              <div class="kpi-card"><div class="kpi-title">Net Revenue</div><div id="eod-net" class="kpi-value" style="color:var(--accent)">0.00</div></div>
+              <div class="kpi-card"><div class="kpi-title">Operating Expenses</div><div id="eod-exp" class="kpi-value">0.00</div></div>
+            </div>
+            <div class="grid-equal-2">
+              <div class="card-panel">
+                <div class="card-panel-title">Payment Method Breakdown</div>
+                <div id="eod-payment-list" style="margin-top:10px;"></div>
+              </div>
+              <div class="card-panel">
+                <div class="card-panel-title">Staff Sales Performance</div>
+                <div id="eod-staff-list" style="margin-top:10px;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
 
+        <!-- 7. CASH REGISTER -->
+        <div id="view-cash_register" class="view-panel">
+          <div class="card-panel">
+            <div class="card-panel-header">
+              <div><div class="card-panel-title">Cash Register & Float</div><div class="card-panel-desc">Opening float, cash sales, cash refunds, and closing balance</div></div>
+              <div style="display:flex; gap:8px;">
+                <input id="cash-reg-date" type="date" class="modern-input no-icon" style="width:150px;">
+                <button class="quick-btn" onclick="loadCashRegister()">Load Date</button>
+                <button class="quick-btn primary" onclick="openModal('set-opening-cash-modal')">Set Opening Float</button>
+              </div>
+            </div>
+            <div class="kpi-grid">
+              <div class="kpi-card"><div class="kpi-title">Opening Cash</div><div id="reg-opening" class="kpi-value">0.00</div></div>
+              <div class="kpi-card"><div class="kpi-title">Cash Sales In</div><div id="reg-sales" class="kpi-value" style="color:var(--accent)">+0.00</div></div>
+              <div class="kpi-card"><div class="kpi-title">Cash Out / Refunds</div><div id="reg-out" class="kpi-value" style="color:var(--danger)">-0.00</div></div>
+              <div class="kpi-card"><div class="kpi-title">Expected Closing Cash</div><div id="reg-closing" class="kpi-value">0.00</div></div>
+            </div>
+            <div class="card-panel-title">Register Transaction Log</div>
+            <div class="table-container" style="margin-top:8px;">
+              <table class="modern-table">
+                <thead><tr><th>Type</th><th>Description</th><th>Amount</th></tr></thead>
+                <tbody id="cash-register-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- 8. STOCK ORDERS (PURCHASE ORDERS) -->
+        <div id="view-purchase_orders" class="view-panel">
+          <div class="card-panel">
+            <div class="card-panel-header">
+              <div><div class="card-panel-title">Stock Purchase Orders</div><div class="card-panel-desc">Supplier orders and auto-reorder replenishment</div></div>
+              <div style="display:flex; gap:8px;">
+                <button class="quick-btn accent" onclick="quickReorderAll()">Quick Reorder Low Stock</button>
+                <button class="quick-btn primary" onclick="openModal('add-po-modal')">+ Create Order</button>
+              </div>
+            </div>
+            <div class="table-container">
+              <table class="modern-table">
+                <thead><tr><th>PO #</th><th>Date</th><th>Product</th><th>Qty</th><th>Unit Cost</th><th>Supplier</th><th>Status</th><th>Actions</th></tr></thead>
+                <tbody id="po-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- 9. REFUNDS & RETURNS -->
+        <div id="view-refunds" class="view-panel">
+          <div class="card-panel">
+            <div class="card-panel-header">
+              <div><div class="card-panel-title">Refunds & Returns</div><div class="card-panel-desc">Lookup invoice, process return, and automatically restock items</div></div>
+            </div>
+            <div style="display:flex; gap:10px; margin-bottom:16px;">
+              <input id="refund-search-input" type="text" class="modern-input no-icon" placeholder="Enter Invoice # or Customer name...">
+              <button class="quick-btn primary" onclick="searchRefundBills()">Find Bill</button>
+            </div>
+            <div class="table-container">
+              <table class="modern-table">
+                <thead><tr><th>Invoice</th><th>Date</th><th>Customer</th><th>Amount</th><th>Payment Mode</th><th>Action</th></tr></thead>
+                <tbody id="refund-search-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- 10. STAFF DIRECTORY -->
+        <div id="view-staff" class="view-panel">
+          <div class="card-panel">
+            <div class="card-panel-header">
+              <div><div class="card-panel-title">Staff Management</div><div class="card-panel-desc">Store personnel, roles, shifts, and commission rates</div></div>
+              <button class="quick-btn primary" onclick="openModal('add-staff-modal')">+ Add Staff Member</button>
+            </div>
+            <div class="table-container">
+              <table class="modern-table">
+                <thead><tr><th>ID</th><th>Name</th><th>Phone</th><th>Role</th><th>Shift Hours</th><th>Commission %</th><th>Base Salary</th><th>Status</th><th>Actions</th></tr></thead>
+                <tbody id="staff-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- 11. SHIFT ROSTER -->
+        <div id="view-roster" class="view-panel">
+          <div class="card-panel">
+            <div class="card-panel-header">
+              <div><div class="card-panel-title">Weekly Shift Roster</div><div class="card-panel-desc">Staff shift scheduling for Monday to Sunday</div></div>
+              <div style="display:flex; gap:8px;">
+                <input id="roster-week-input" type="text" class="modern-input no-icon" value="2026-W45" style="width:120px;">
+                <button class="quick-btn primary" onclick="loadRoster()">Load Week</button>
+              </div>
+            </div>
+            <div class="table-container">
+              <table class="modern-table">
+                <thead><tr><th>Staff</th><th>Role</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th></tr></thead>
+                <tbody id="roster-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- 12. PAYROLL & SALARY SLIPS -->
+        <div id="view-salary" class="view-panel">
+          <div class="card-panel">
+            <div class="card-panel-header">
+              <div><div class="card-panel-title">Payroll & Salary Slips</div><div class="card-panel-desc">Base salary + commission earned from sales - advance deductions</div></div>
+              <button class="quick-btn primary" onclick="openModal('add-advance-modal')">+ Record Advance</button>
+            </div>
+            <div class="table-container">
+              <table class="modern-table">
+                <thead><tr><th>Staff</th><th>Role</th><th>Base Salary</th><th>Sales Handled</th><th>Commission</th><th>Advances</th><th>Net Payout</th></tr></thead>
+                <tbody id="salary-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- 13. SALES TARGETS -->
+        <div id="view-targets" class="view-panel">
+          <div class="card-panel">
+            <div class="card-panel-header">
+              <div><div class="card-panel-title">Monthly Sales Targets</div><div class="card-panel-desc">Target vs actual performance</div></div>
+              <button class="quick-btn primary" onclick="openModal('edit-target-modal')">Set Monthly Target</button>
+            </div>
+            <div class="kpi-grid">
+              <div class="kpi-card"><div class="kpi-title">Current Target</div><div id="target-amt" class="kpi-value">0.00</div></div>
+              <div class="kpi-card"><div class="kpi-title">Current Revenue</div><div id="target-rev" class="kpi-value" style="color:var(--accent)">0.00</div></div>
+              <div class="kpi-card"><div class="kpi-title">Progress Achieved</div><div id="target-pct" class="kpi-value">0%</div></div>
+            </div>
+            <div class="card-panel-title" style="margin-top:16px;">Staff Individual Targets</div>
+            <div class="table-container" style="margin-top:8px;">
+              <table class="modern-table">
+                <thead><tr><th>Staff Member</th><th>Role</th><th>Target</th><th>Revenue Achieved</th><th>Progress</th></tr></thead>
+                <tbody id="staff-targets-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- 14. EXPENSES -->
+        <div id="view-expenses" class="view-panel">
+          <div class="card-panel">
+            <div class="card-panel-header">
+              <div><div class="card-panel-title">Operational Store Expenses</div><div class="card-panel-desc">Rent, electricity, supplies, maintenance, and miscellaneous costs</div></div>
+              <button class="quick-btn primary" onclick="openModal('add-expense-modal')">+ Log Expense</button>
+            </div>
+            <div class="table-container">
+              <table class="modern-table">
+                <thead><tr><th>Date</th><th>Category</th><th>Amount</th><th>Note</th><th>Actions</th></tr></thead>
+                <tbody id="expenses-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- 15. HOLIDAYS -->
+        <div id="view-holidays" class="view-panel">
+          <div class="card-panel">
+            <div class="card-panel-header">
+              <div><div class="card-panel-title">Store Holidays Calendar</div><div class="card-panel-desc">Planned holiday closures</div></div>
+              <button class="quick-btn primary" onclick="openModal('add-holiday-modal')">+ Add Holiday</button>
+            </div>
+            <div class="table-container">
+              <table class="modern-table">
+                <thead><tr><th>Date</th><th>Holiday Name</th><th>Type</th><th>Actions</th></tr></thead>
+                <tbody id="holidays-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- 16. SALES CALENDAR -->
+        <div id="view-calendar" class="view-panel">
+          <div class="card-panel">
+            <div class="card-panel-header">
+              <div><div class="card-panel-title">Monthly Sales Calendar Heatmap</div><div class="card-panel-desc">Daily revenue distribution</div></div>
+              <div style="display:flex; gap:8px;">
+                <input id="cal-month-select" type="month" class="modern-input no-icon" value="2026-11" style="width:140px;">
+                <button class="quick-btn primary" onclick="loadCalendarHeat()">Load Month</button>
+              </div>
+            </div>
+            <div id="calendar-heatmap-container" class="calendar-grid"></div>
+          </div>
+        </div>
+
+        <!-- 17. GST TAX REPORT -->
+        <div id="view-gst" class="view-panel">
+          <div class="card-panel">
+            <div class="card-panel-header">
+              <div><div class="card-panel-title">GST Tax Filing Report</div><div class="card-panel-desc">HSN-wise breakdown and CGST/SGST liability</div></div>
+              <div style="display:flex; gap:8px;">
+                <input id="gst-from-date" type="date" class="modern-input no-icon" style="width:140px;">
+                <input id="gst-to-date" type="date" class="modern-input no-icon" style="width:140px;">
+                <button class="quick-btn primary" onclick="loadGSTReport()">Generate Report</button>
+              </div>
+            </div>
+            <div class="kpi-grid">
+              <div class="kpi-card"><div class="kpi-title">Taxable Turnover</div><div id="gst-taxable" class="kpi-value">0.00</div></div>
+              <div class="kpi-card"><div class="kpi-title">CGST (9%)</div><div id="gst-cgst" class="kpi-value">0.00</div></div>
+              <div class="kpi-card"><div class="kpi-title">SGST (9%)</div><div id="gst-sgst" class="kpi-value">0.00</div></div>
+              <div class="kpi-card"><div class="kpi-title">Total GST Liability</div><div id="gst-total" class="kpi-value" style="color:var(--accent)">0.00</div></div>
+            </div>
+            <div class="table-container">
+              <table class="modern-table">
+                <thead><tr><th>HSN Code</th><th>Category</th><th>Qty Sold</th><th>Taxable Value</th><th>CGST (9%)</th><th>SGST (9%)</th></tr></thead>
+                <tbody id="gst-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- 18. BREAK-EVEN ANALYSIS -->
+        <div id="view-breakeven" class="view-panel">
+          <div class="card-panel">
+            <div class="card-panel-header">
+              <div><div class="card-panel-title">Break-Even Analysis</div><div class="card-panel-desc">Fixed overhead costs vs realized revenues</div></div>
+            </div>
+            <div class="kpi-grid">
+              <div class="kpi-card"><div class="kpi-title">Fixed Operating Costs</div><div id="be-fixed" class="kpi-value">0.00</div></div>
+              <div class="kpi-card"><div class="kpi-title">Realized Revenue</div><div id="be-rev" class="kpi-value">0.00</div></div>
+              <div class="kpi-card"><div class="kpi-title">Break-Even Status</div><div id="be-status" class="kpi-value" style="font-size:1.2rem;">Analyzing...</div></div>
+              <div class="kpi-card"><div class="kpi-title">Units Needed (Top Item)</div><div id="be-units" class="kpi-value">0</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 19. BUSINESS INSIGHTS -->
+        <div id="view-insights" class="view-panel">
+          <div class="grid-equal-2">
             <div class="card-panel">
-              <div class="card-panel-header">
-                <div>
-                  <div class="card-panel-title">Payment Mode Distribution</div>
-                  <div class="card-panel-desc">Cash vs UPI vs Card share</div>
-                </div>
+              <div class="card-panel-title">Dead Stock (Zero sales in 30 days)</div>
+              <div class="card-panel-desc">Products tying up capital without velocity</div>
+              <div class="table-container" style="margin-top:8px;">
+                <table class="modern-table">
+                  <thead><tr><th>Product Name</th><th>Current Stock</th></tr></thead>
+                  <tbody id="dead-stock-tbody"></tbody>
+                </table>
               </div>
-              <div style="height: 300px; position:relative;">
-                <canvas id="paymentChart"></canvas>
+            </div>
+            <div class="card-panel">
+              <div class="card-panel-title">Urgent Reorder Suggestions</div>
+              <div class="card-panel-desc">Items below safety buffer</div>
+              <div class="table-container" style="margin-top:8px;">
+                <table class="modern-table">
+                  <thead><tr><th>Product Name</th><th>Units Left</th><th>Price</th></tr></thead>
+                  <tbody id="reorder-sug-tbody"></tbody>
+                </table>
               </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 20. PEAK PATTERNS -->
+        <div id="view-analytics_plus" class="view-panel">
+          <div class="card-panel">
+            <div class="card-panel-header">
+              <div><div class="card-panel-title">Day-of-Week Revenue Averages</div><div class="card-panel-desc">Historical sales volume per weekday</div></div>
+            </div>
+            <div style="height: 280px; position:relative;"><canvas id="dayAvgChart"></canvas></div>
+            <div id="day-prediction-box" style="margin-top:14px; padding:12px; background:var(--bg-subtle); border-radius:var(--radius-sm); font-size:0.85rem; font-weight:600;"></div>
+          </div>
+        </div>
+
+        <!-- 21. SETTINGS & EXPORT -->
+        <div id="view-settings" class="view-panel">
+          <div class="card-panel" style="max-width:650px;">
+            <div class="card-panel-title">Store Configuration</div>
+            <div class="card-panel-desc" style="margin-bottom:14px;">Store metadata and currency display</div>
+            <div class="form-group">
+              <label class="form-label">Shop Name</label>
+              <input id="setting-shop-name" type="text" class="modern-input no-icon">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Phone Number</label>
+              <input id="setting-shop-phone" type="text" class="modern-input no-icon">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Store Address</label>
+              <input id="setting-shop-address" type="text" class="modern-input no-icon">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Currency</label>
+              <select id="setting-shop-currency" class="modern-input no-icon">
+                <option value="INR">INR - Indian Rupee</option>
+                <option value="USD">USD - US Dollar</option>
+                <option value="EUR">EUR - Euro</option>
+                <option value="GBP">GBP - British Pound</option>
+                <option value="AED">AED - UAE Dirham</option>
+              </select>
+            </div>
+            <button class="quick-btn primary" style="margin-top:10px;" onclick="saveStoreSettings()">Save Settings</button>
+
+            <div class="card-panel-title" style="margin-top:24px;">Data Export</div>
+            <div class="card-panel-desc" style="margin-bottom:10px;">Download local database tables as CSV files</div>
+            <div style="display:flex; gap:10px;">
+              <a href="/api/export/bills" download="bills.csv" class="quick-btn">Export Invoices CSV</a>
+              <a href="/api/export/products" download="products.csv" class="quick-btn">Export Products CSV</a>
             </div>
           </div>
         </div>
@@ -369,57 +647,31 @@
   <div id="checkout-modal" class="modal-overlay">
     <div class="modal-card">
       <div class="modal-header">
-        <h3 style="font-size:1.1rem; font-weight:700;">Complete Checkout</h3>
-        <button class="quick-btn" style="padding:2px 8px;" onclick="closeModal('checkout-modal')">✕</button>
+        <h3 style="font-size:1rem; font-weight:700;">Complete Checkout</h3>
+        <button class="quick-btn" style="padding:2px 8px;" onclick="closeModal('checkout-modal')">Close</button>
       </div>
       <div class="modal-body">
-        <div style="text-align:center; padding:12px; background:var(--bg-subtle); border-radius:var(--radius-sm);">
-          <div style="font-size:0.8rem; color:var(--text-muted)">Amount Due</div>
-          <div id="modal-total-display" style="font-size:2rem; font-weight:700; color:var(--accent);">₹0.00</div>
+        <div style="text-align:center; padding:10px; background:var(--bg-subtle); border-radius:var(--radius-sm);">
+          <div style="font-size:0.75rem; color:var(--text-muted)">Amount Due</div>
+          <div id="modal-total-display" style="font-size:1.8rem; font-weight:700; color:var(--accent);">0.00</div>
         </div>
-
         <div class="form-group">
           <label class="form-label">Payment Method</label>
           <div class="payment-modes-grid">
-            <div class="pay-mode-card active" data-mode="Cash" onclick="selectPayMode('Cash')">💵 Cash</div>
-            <div class="pay-mode-card" data-mode="UPI" onclick="selectPayMode('UPI')">📱 UPI / QR</div>
-            <div class="pay-mode-card" data-mode="Card" onclick="selectPayMode('Card')">💳 Card</div>
+            <div class="pay-mode-card active" data-mode="Cash" onclick="selectPayMode('Cash')">Cash</div>
+            <div class="pay-mode-card" data-mode="UPI" onclick="selectPayMode('UPI')">UPI / QR</div>
+            <div class="pay-mode-card" data-mode="Card" onclick="selectPayMode('Card')">Card</div>
           </div>
         </div>
-
         <div id="cash-details-group" class="form-group">
-          <label class="form-label">Cash Tendered (₹)</label>
-          <input id="cash-tendered-input" type="number" class="modern-input" oninput="updateChangeDisplay()">
-          <div style="display:flex; justify-content:space-between; margin-top:6px; font-size:0.85rem; font-weight:600;">
+          <label class="form-label">Cash Tendered</label>
+          <input id="cash-tendered-input" type="number" class="modern-input no-icon" oninput="updateChangeDisplay()">
+          <div style="display:flex; justify-content:space-between; margin-top:4px; font-size:0.8rem; font-weight:600;">
             <span>Change to Return:</span>
-            <span id="cash-change-display" style="color:var(--accent);">₹0.00</span>
+            <span id="cash-change-display" style="color:var(--accent);">0.00</span>
           </div>
         </div>
-
-        <div id="qr-details-group" style="display:none; text-align:center; padding:14px; background:var(--bg-subtle); border-radius:var(--radius-sm);">
-          <div style="font-weight:700; margin-bottom:4px;">Scan & Pay UPI</div>
-          <div style="font-size:0.8rem; color:var(--text-muted); margin-bottom:8px;">UPI ID: billflow@upi · Dynamic QR</div>
-          <div style="display:inline-block; padding:10px; background:#fff; border-radius:8px;">
-            <svg width="120" height="120" viewBox="0 0 100 100">
-              <rect x="10" y="10" width="30" height="30" fill="#000"/>
-              <rect x="15" y="15" width="20" height="20" fill="#fff"/>
-              <rect x="20" y="20" width="10" height="10" fill="#000"/>
-              <rect x="60" y="10" width="30" height="30" fill="#000"/>
-              <rect x="65" y="15" width="20" height="20" fill="#fff"/>
-              <rect x="70" y="20" width="10" height="10" fill="#000"/>
-              <rect x="10" y="60" width="30" height="30" fill="#000"/>
-              <rect x="15" y="65" width="20" height="20" fill="#fff"/>
-              <rect x="20" y="70" width="10" height="10" fill="#000"/>
-              <rect x="50" y="50" width="15" height="15" fill="#000"/>
-              <rect x="70" y="60" width="20" height="10" fill="#000"/>
-              <rect x="60" y="80" width="30" height="10" fill="#000"/>
-            </svg>
-          </div>
-        </div>
-
-        <button class="checkout-btn" onclick="submitCheckout()">
-          Confirm & Print Bill
-        </button>
+        <button class="checkout-btn" onclick="submitCheckout()">Confirm & Generate Invoice</button>
       </div>
     </div>
   </div>
@@ -428,28 +680,19 @@
   <div id="add-product-modal" class="modal-overlay">
     <div class="modal-card">
       <div class="modal-header">
-        <h3 style="font-size:1.1rem; font-weight:700;">Add New Product</h3>
-        <button class="quick-btn" style="padding:2px 8px;" onclick="closeModal('add-product-modal')">✕</button>
+        <h3 style="font-size:1rem; font-weight:700;">Add Product</h3>
+        <button class="quick-btn" style="padding:2px 8px;" onclick="closeModal('add-product-modal')">Close</button>
       </div>
       <div class="modal-body">
-        <div class="form-group">
-          <label class="form-label">Product Name *</label>
-          <input id="new-prod-name" type="text" class="modern-input" placeholder="e.g. Wireless Ergonomic Mouse">
+        <div class="form-group"><label class="form-label">Product Name *</label><input id="new-prod-name" type="text" class="modern-input no-icon"></div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+          <div class="form-group"><label class="form-label">Unit Price *</label><input id="new-prod-price" type="number" step="0.01" class="modern-input no-icon"></div>
+          <div class="form-group"><label class="form-label">Initial Stock *</label><input id="new-prod-stock" type="number" class="modern-input no-icon"></div>
         </div>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
-          <div class="form-group">
-            <label class="form-label">Unit Price (₹) *</label>
-            <input id="new-prod-price" type="number" step="0.01" class="modern-input" placeholder="499.00">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Initial Stock *</label>
-            <input id="new-prod-stock" type="number" class="modern-input" placeholder="50">
-          </div>
-        </div>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
           <div class="form-group">
             <label class="form-label">Category</label>
-            <select id="new-prod-category" class="modern-input">
+            <select id="new-prod-category" class="modern-input no-icon">
               <option value="Electronics">Electronics</option>
               <option value="Grocery">Grocery</option>
               <option value="Beverages">Beverages</option>
@@ -457,10 +700,7 @@
               <option value="Stationery">Stationery</option>
             </select>
           </div>
-          <div class="form-group">
-            <label class="form-label">HSN Code</label>
-            <input id="new-prod-hsn" type="text" class="modern-input" placeholder="8518">
-          </div>
+          <div class="form-group"><label class="form-label">HSN Code</label><input id="new-prod-hsn" type="text" class="modern-input no-icon"></div>
         </div>
         <button class="checkout-btn" onclick="submitNewProduct()">Save Product</button>
       </div>
@@ -471,49 +711,215 @@
   <div id="add-customer-modal" class="modal-overlay">
     <div class="modal-card">
       <div class="modal-header">
-        <h3 style="font-size:1.1rem; font-weight:700;">Add Customer</h3>
-        <button class="quick-btn" style="padding:2px 8px;" onclick="closeModal('add-customer-modal')">✕</button>
+        <h3 style="font-size:1rem; font-weight:700;">Add Customer</h3>
+        <button class="quick-btn" style="padding:2px 8px;" onclick="closeModal('add-customer-modal')">Close</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group"><label class="form-label">Name *</label><input id="new-cust-name" type="text" class="modern-input no-icon"></div>
+        <div class="form-group"><label class="form-label">Phone</label><input id="new-cust-phone" type="text" class="modern-input no-icon"></div>
+        <div class="form-group"><label class="form-label">Email</label><input id="new-cust-email" type="email" class="modern-input no-icon"></div>
+        <div class="form-group">
+          <label class="form-label">Tier / Tag</label>
+          <select id="new-cust-tag" class="modern-input no-icon">
+            <option value="Regular">Regular</option>
+            <option value="VIP">VIP</option>
+            <option value="Frequent">Frequent</option>
+          </select>
+        </div>
+        <button class="checkout-btn" onclick="submitNewCustomer()">Save Customer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADD EXPENSE MODAL -->
+  <div id="add-expense-modal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 style="font-size:1rem; font-weight:700;">Log Expense</h3>
+        <button class="quick-btn" style="padding:2px 8px;" onclick="closeModal('add-expense-modal')">Close</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group"><label class="form-label">Date</label><input id="new-exp-date" type="date" class="modern-input no-icon"></div>
+        <div class="form-group">
+          <label class="form-label">Category</label>
+          <select id="new-exp-cat" class="modern-input no-icon">
+            <option value="Rent">Rent</option>
+            <option value="Electricity">Electricity</option>
+            <option value="Salaries">Salaries</option>
+            <option value="Supplies">Supplies</option>
+            <option value="Maintenance">Maintenance</option>
+            <option value="Miscellaneous">Miscellaneous</option>
+          </select>
+        </div>
+        <div class="form-group"><label class="form-label">Amount *</label><input id="new-exp-amt" type="number" step="0.01" class="modern-input no-icon"></div>
+        <div class="form-group"><label class="form-label">Note</label><input id="new-exp-note" type="text" class="modern-input no-icon"></div>
+        <button class="checkout-btn" onclick="submitNewExpense()">Record Expense</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADD COUPON MODAL -->
+  <div id="add-coupon-modal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 style="font-size:1rem; font-weight:700;">Create Coupon</h3>
+        <button class="quick-btn" style="padding:2px 8px;" onclick="closeModal('add-coupon-modal')">Close</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group"><label class="form-label">Coupon Code *</label><input id="new-coup-code" type="text" class="modern-input no-icon" style="text-transform:uppercase;"></div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+          <div class="form-group">
+            <label class="form-label">Discount Type</label>
+            <select id="new-coup-type" class="modern-input no-icon">
+              <option value="percent">Percent (%)</option>
+              <option value="flat">Flat Value</option>
+            </select>
+          </div>
+          <div class="form-group"><label class="form-label">Discount Value *</label><input id="new-coup-val" type="number" class="modern-input no-icon"></div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+          <div class="form-group"><label class="form-label">Min Bill Amount</label><input id="new-coup-min" type="number" class="modern-input no-icon" value="0"></div>
+          <div class="form-group"><label class="form-label">Expiry Date</label><input id="new-coup-exp" type="date" class="modern-input no-icon"></div>
+        </div>
+        <div class="form-group"><label class="form-label">Description</label><input id="new-coup-desc" type="text" class="modern-input no-icon"></div>
+        <button class="checkout-btn" onclick="submitNewCoupon()">Create Coupon</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SET OPENING CASH MODAL -->
+  <div id="set-opening-cash-modal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 style="font-size:1rem; font-weight:700;">Set Opening Cash Float</h3>
+        <button class="quick-btn" style="padding:2px 8px;" onclick="closeModal('set-opening-cash-modal')">Close</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group"><label class="form-label">Opening Cash Amount *</label><input id="opening-cash-amt" type="number" step="0.01" class="modern-input no-icon" value="5000"></div>
+        <button class="checkout-btn" onclick="submitOpeningCash()">Update Float</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CREATE PURCHASE ORDER MODAL -->
+  <div id="add-po-modal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 style="font-size:1rem; font-weight:700;">Create Stock Purchase Order</h3>
+        <button class="quick-btn" style="padding:2px 8px;" onclick="closeModal('add-po-modal')">Close</button>
       </div>
       <div class="modal-body">
         <div class="form-group">
-          <label class="form-label">Customer Name *</label>
-          <input id="new-cust-name" type="text" class="modern-input" placeholder="e.g. Aditi Rao">
+          <label class="form-label">Product *</label>
+          <select id="new-po-prod" class="modern-input no-icon"></select>
         </div>
-        <div class="form-group">
-          <label class="form-label">Phone Number</label>
-          <input id="new-cust-phone" type="text" class="modern-input" placeholder="9876543210">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+          <div class="form-group"><label class="form-label">Quantity to Order *</label><input id="new-po-qty" type="number" class="modern-input no-icon" value="20"></div>
+          <div class="form-group"><label class="form-label">Unit Cost *</label><input id="new-po-cost" type="number" step="0.01" class="modern-input no-icon"></div>
         </div>
+        <div class="form-group"><label class="form-label">Supplier Name</label><input id="new-po-supp" type="text" class="modern-input no-icon"></div>
+        <div class="form-group"><label class="form-label">Note</label><input id="new-po-note" type="text" class="modern-input no-icon"></div>
+        <button class="checkout-btn" onclick="submitNewPO()">Create Order</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADD STAFF MODAL -->
+  <div id="add-staff-modal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 style="font-size:1rem; font-weight:700;">Add Staff Member</h3>
+        <button class="quick-btn" style="padding:2px 8px;" onclick="closeModal('add-staff-modal')">Close</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group"><label class="form-label">Full Name *</label><input id="new-staff-name" type="text" class="modern-input no-icon"></div>
+        <div class="form-group"><label class="form-label">Phone</label><input id="new-staff-phone" type="text" class="modern-input no-icon"></div>
         <div class="form-group">
-          <label class="form-label">Email Address</label>
-          <input id="new-cust-email" type="email" class="modern-input" placeholder="aditi@example.com">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Tier / Tag</label>
-          <select id="new-cust-tag" class="modern-input">
-            <option value="Regular">Regular</option>
-            <option value="VIP">VIP</option>
-            <option value="Gold">Gold</option>
-            <option value="Wholesale">Wholesale</option>
+          <label class="form-label">Role</label>
+          <select id="new-staff-role" class="modern-input no-icon">
+            <option value="Cashier">Cashier</option>
+            <option value="Store Manager">Store Manager</option>
+            <option value="Sales Executive">Sales Executive</option>
+            <option value="Inventory Specialist">Inventory Specialist</option>
           </select>
         </div>
-        <button class="checkout-btn" onclick="submitNewCustomer()">Register Customer</button>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+          <div class="form-group"><label class="form-label">Shift Start</label><input id="new-staff-start" type="text" class="modern-input no-icon" value="09:00"></div>
+          <div class="form-group"><label class="form-label">Shift End</label><input id="new-staff-end" type="text" class="modern-input no-icon" value="18:00"></div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+          <div class="form-group"><label class="form-label">Monthly Salary</label><input id="new-staff-sal" type="number" class="modern-input no-icon" value="20000"></div>
+          <div class="form-group"><label class="form-label">Commission %</label><input id="new-staff-comm" type="number" step="0.1" class="modern-input no-icon" value="1.0"></div>
+        </div>
+        <button class="checkout-btn" onclick="submitNewStaff()">Save Staff</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- RECORD ADVANCE MODAL -->
+  <div id="add-advance-modal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 style="font-size:1rem; font-weight:700;">Record Salary Advance</h3>
+        <button class="quick-btn" style="padding:2px 8px;" onclick="closeModal('add-advance-modal')">Close</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group"><label class="form-label">Staff Member *</label><select id="adv-staff-select" class="modern-input no-icon"></select></div>
+        <div class="form-group"><label class="form-label">Advance Amount *</label><input id="adv-amount" type="number" class="modern-input no-icon"></div>
+        <div class="form-group"><label class="form-label">Note</label><input id="adv-note" type="text" class="modern-input no-icon"></div>
+        <button class="checkout-btn" onclick="submitSalaryAdvance()">Record Advance</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADD HOLIDAY MODAL -->
+  <div id="add-holiday-modal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 style="font-size:1rem; font-weight:700;">Add Holiday</h3>
+        <button class="quick-btn" style="padding:2px 8px;" onclick="closeModal('add-holiday-modal')">Close</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group"><label class="form-label">Date *</label><input id="new-hol-date" type="date" class="modern-input no-icon"></div>
+        <div class="form-group"><label class="form-label">Holiday Name *</label><input id="new-hol-name" type="text" class="modern-input no-icon"></div>
+        <div class="form-group">
+          <label class="form-label">Type</label>
+          <select id="new-hol-type" class="modern-input no-icon">
+            <option value="National">National</option>
+            <option value="Festival">Festival</option>
+            <option value="Store Maintenance">Store Maintenance</option>
+          </select>
+        </div>
+        <button class="checkout-btn" onclick="submitNewHoliday()">Save Holiday</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SET TARGET MODAL -->
+  <div id="edit-target-modal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 style="font-size:1rem; font-weight:700;">Set Monthly Target</h3>
+        <button class="quick-btn" style="padding:2px 8px;" onclick="closeModal('edit-target-modal')">Close</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group"><label class="form-label">Monthly Target Amount *</label><input id="target-input-val" type="number" class="modern-input no-icon" value="500000"></div>
+        <button class="checkout-btn" onclick="submitTargetUpdate()">Update Target</button>
       </div>
     </div>
   </div>
 
   <!-- RECEIPT MODAL -->
   <div id="receipt-modal" class="modal-overlay">
-    <div class="modal-card" style="max-width: 400px;">
+    <div class="modal-card" style="max-width: 380px;">
       <div class="modal-header">
-        <h3 style="font-size:1rem; font-weight:700;">Official Invoice Receipt</h3>
-        <button class="quick-btn" style="padding:2px 8px;" onclick="closeModal('receipt-modal')">✕</button>
+        <h3 style="font-size:0.95rem; font-weight:700;">Store Receipt</h3>
+        <button class="quick-btn" style="padding:2px 8px;" onclick="closeModal('receipt-modal')">Close</button>
       </div>
       <div class="modal-body">
-        <div id="receipt-paper-content" class="receipt-paper">
-          <!-- Populated dynamically -->
-        </div>
-        <div style="display:flex; gap:10px; margin-top:10px;">
-          <button class="quick-btn" style="flex:1;" onclick="window.print()">🖨️ Print Receipt</button>
+        <div id="receipt-paper-content" class="receipt-paper"></div>
+        <div style="display:flex; gap:8px; margin-top:8px;">
+          <button class="quick-btn" style="flex:1;" onclick="window.print()">Print</button>
           <button class="quick-btn primary" style="flex:1;" onclick="closeModal('receipt-modal')">Done</button>
         </div>
       </div>

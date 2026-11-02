@@ -17,24 +17,24 @@ if os.path.exists(OLD_DB_PATH) and not os.path.exists(DB_PATH):
     except Exception:
         pass
 
-# Supported Currencies with flag emoji
+# Supported Currencies
 CURRENCIES = {
-    "INR — ₹  India":        {"symbol": "₹",  "code": "INR", "flag": "🇮🇳"},
-    "USD — $  United States":{"symbol": "$",  "code": "USD", "flag": "🇺🇸"},
-    "EUR — €  Euro Zone":    {"symbol": "€",  "code": "EUR", "flag": "🇪🇺"},
-    "GBP — £  UK":           {"symbol": "£",  "code": "GBP", "flag": "🇬🇧"},
-    "JPY — ¥  Japan":        {"symbol": "¥",  "code": "JPY", "flag": "🇯🇵"},
-    "CNY — ¥  China":        {"symbol": "¥",  "code": "CNY", "flag": "🇨🇳"},
-    "AED — د.إ  UAE":        {"symbol": "د.إ","code": "AED", "flag": "🇦🇪"},
-    "SGD — S$  Singapore":   {"symbol": "S$", "code": "SGD", "flag": "🇸🇬"},
-    "AUD — A$  Australia":   {"symbol": "A$", "code": "AUD", "flag": "🇦🇺"},
-    "CAD — C$  Canada":      {"symbol": "C$", "code": "CAD", "flag": "🇨🇦"},
-    "BRL — R$  Brazil":      {"symbol": "R$", "code": "BRL", "flag": "🇧🇷"},
-    "ZAR — R   South Africa":{"symbol": "R",  "code": "ZAR", "flag": "🇿🇦"},
-    "NGN — ₦  Nigeria":      {"symbol": "₦",  "code": "NGN", "flag": "🇳🇬"},
-    "KES — Ksh Kenya":       {"symbol": "Ksh","code": "KES", "flag": "🇰🇪"},
-    "PKR — ₨  Pakistan":     {"symbol": "₨",  "code": "PKR", "flag": "🇵🇰"},
-    "BDT — ৳  Bangladesh":   {"symbol": "৳",  "code": "BDT", "flag": "🇧🇩"},
+    "INR — ₹  India":        {"symbol": "₹",  "code": "INR"},
+    "USD — $  United States":{"symbol": "$",  "code": "USD"},
+    "EUR — €  Euro Zone":    {"symbol": "€",  "code": "EUR"},
+    "GBP — £  UK":           {"symbol": "£",  "code": "GBP"},
+    "JPY — ¥  Japan":        {"symbol": "¥",  "code": "JPY"},
+    "CNY — ¥  China":        {"symbol": "¥",  "code": "CNY"},
+    "AED — د.إ  UAE":        {"symbol": "د.إ","code": "AED"},
+    "SGD — S$  Singapore":   {"symbol": "S$", "code": "SGD"},
+    "AUD — A$  Australia":   {"symbol": "A$", "code": "AUD"},
+    "CAD — C$  Canada":      {"symbol": "C$", "code": "CAD"},
+    "BRL — R$  Brazil":      {"symbol": "R$", "code": "BRL"},
+    "ZAR — R   South Africa":{"symbol": "R",  "code": "ZAR"},
+    "NGN — ₦  Nigeria":      {"symbol": "₦",  "code": "NGN"},
+    "KES — Ksh Kenya":       {"symbol": "Ksh","code": "KES"},
+    "PKR — ₨  Pakistan":     {"symbol": "₨",  "code": "PKR"},
+    "BDT — ৳  Bangladesh":   {"symbol": "৳",  "code": "BDT"},
 }
 
 DEFAULT_SETTINGS = {

@@ -76,7 +76,13 @@ pip install -r requirements.txt
 ### 2. Launch the Application
 
 #### Option A: Next-Gen Modern Suite (shadcn/ui Design Language)
-Built with shadcn/ui design tokens, featuring interactive Charts, POS touch terminal, inventory studio, and customer CRM:
+Built with shadcn/ui design tokens, featuring all 21 operational, financial, and management views:
+- **Core Operations**: Executive Dashboard, POS Billing Terminal, Product & Inventory Management, Customer CRM, Promotions & Coupons.
+- **Store Operations**: End of Day (EOD) Reconciliation, Cash Register & Float, Stock Purchase Orders (with auto-replenishment), Refunds & Returns (with automatic inventory restocking).
+- **People & HR**: Staff Directory, Weekly Shift Roster, Payroll & Salary Slips, Sales Targets, Operational Expenses, Store Holidays.
+- **Analytics & Reports**: Monthly Sales Calendar Heatmap, GST Tax Filing Report (HSN breakdown), Break-Even Analysis, Business Insights (dead stock & cohort retention), Peak Patterns.
+- **Settings & Tools**: Store Configuration, Currency settings, CSV Data Exports.
+
 ```bash
 # Launch as a Native Desktop App (PySide6 QtWebEngine)
 python3 run_modern.py

@@ -50,7 +50,7 @@ def launch_desktop(port):
     app.setApplicationName("BillFlow Next-Gen")
 
     window = QMainWindow()
-    window.setWindowTitle("BillFlow ⚡ Next-Gen Sales & POS Suite (shadcn/ui)")
+    window.setWindowTitle("BillFlow Next-Gen Sales & POS Suite (shadcn/ui)")
     window.resize(1300, 850)
 
     web_view = QWebEngineView()
@@ -59,13 +59,13 @@ def launch_desktop(port):
     window.setCentralWidget(web_view)
     window.show()
 
-    print(f"✨ Native Desktop window open! Rendering on port {port}.")
+    print(f"Native Desktop window open. Rendering on port {port}.")
     sys.exit(app.exec())
 
 
 def launch_browser(port):
     url = f"http://127.0.0.1:{port}/"
-    print(f"🌐 Opening BillFlow in default browser: {url}")
+    print(f"Opening BillFlow in default browser: {url}")
     webbrowser.open(url)
     print("Press Ctrl+C to stop server...")
     try:
