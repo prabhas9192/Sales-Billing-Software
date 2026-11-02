@@ -68,6 +68,18 @@ function initTheme() {
       if (state.activeView === 'analytics_plus') loadAnalyticsPlus();
     });
   }
+
+  const sbPosSelector = document.getElementById('sidebar-pos-select');
+  if (sbPosSelector) {
+    const savedPos = localStorage.getItem('billflow_sidebar_pos') || 'left';
+    sbPosSelector.value = savedPos;
+    document.documentElement.setAttribute('data-sidebar-pos', savedPos);
+    sbPosSelector.addEventListener('change', (e) => {
+      const pos = e.target.value;
+      document.documentElement.setAttribute('data-sidebar-pos', pos);
+      localStorage.setItem('billflow_sidebar_pos', pos);
+    });
+  }
 }
 
 function setupNavigation() {
